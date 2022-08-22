@@ -125,15 +125,15 @@ export default function index() {
       <Map ref={map} onPolygonClick={handlePolygonClick} polygonList={polygonList}></Map>
       {/* 左右中内容 */}
       <Grid container className="content_data">
-        <Grid className="grid-left-box">
+        <Grid className="grid-left-box" xs={3}>
           <Left onPlowlandChecked={handlePlowlandChecked} onPlowlandUnchecked={handlePlowlandUnChecked}></Left>
         </Grid>
         {centrePolygon && centrePolygon.options.type === 0 && (
-          <Grid className="grid-center-box">
+          <Grid className="grid-center-box" xs={6}>
             <Centre onBack={handleBack} polygon={centrePolygon}></Centre>
           </Grid>
         )}
-        <Grid className="grid-right-box">
+        <Grid className="grid-right-box" xs={3}>
           <Right
             onCheckDetails={handleCheckDetails}
             onPlowlandChecked={handlePlowlandChecked}

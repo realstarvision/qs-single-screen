@@ -52,7 +52,7 @@ const index = (
   useEffect(() => {
     setTimeout(() => {
       if (map.current) {
-        if (latlngs.length > 0) {
+        if (latlngs && latlngs.length > 0) {
           let polygon = L.polygon(latlngs).addTo(map.current)
           map.current.fitBounds(polygon.getBounds())
         }

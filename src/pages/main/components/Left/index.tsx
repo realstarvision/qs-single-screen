@@ -134,7 +134,7 @@ export default function Left({ onPlowlandChecked, onPlowlandUnchecked }) {
     <Box className="left-container">
       <Titlebar icon={project_details} title="耕地数量账本" rightFont="单位：万亩"></Titlebar>
       <Box className="plough-box">
-        {farmlandAccountBookList.map(item => {
+        {farmlandAccountBookList.map((item, index) => {
           return (
             <Grid
               container
@@ -143,6 +143,7 @@ export default function Left({ onPlowlandChecked, onPlowlandUnchecked }) {
               sx={{
                 background: item.checked ? 'linear-gradient(90deg, #0943B3 0%, rgba(9,74,198,0.5000) 100%)' : ''
               }}
+              key={index}
             >
               <Grid xs={7} className="cell">
                 <img src={item.icon} className="icon" /> <span className="title">{item.genre}</span>
@@ -172,9 +173,9 @@ export default function Left({ onPlowlandChecked, onPlowlandUnchecked }) {
           <span className="count">{farmlandStandard.inventory || 0}</span>
         </Box>
         <Box className="proportion-type">
-          {farmlandStandard.list.map(item => {
+          {farmlandStandard.list.map((item, index) => {
             return (
-              <Box className="item">
+              <Box className="item" key={index}>
                 <p>{item.name}</p>
                 <p>{item.value}</p>
               </Box>

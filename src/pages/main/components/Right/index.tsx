@@ -75,7 +75,7 @@ export default function Right({ onCheckDetails, onPlowlandChecked, onPlowlandUnc
           <Grid xs={3}>以认定</Grid>
           <Grid xs={2}>状态</Grid>
         </Grid>
-        {farmlandControlList.farmlandOverviewVOList.map(item => {
+        {farmlandControlList.farmlandOverviewVOList.map((item, index) => {
           return (
             <Grid
               container
@@ -86,6 +86,7 @@ export default function Right({ onCheckDetails, onPlowlandChecked, onPlowlandUnc
                   ? 'linear-gradient(-90deg, #0943B3 0%, rgba(9,74,198,0.5000) 100%) !important'
                   : ''
               }}
+              key={index}
             >
               <Grid xs={7} className="type">
                 <span> {item.genre}</span>
