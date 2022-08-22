@@ -18,7 +18,7 @@ const index = (
   {
     onPolygonClick,
     latlngs,
-    polygonList
+    polygonList,
   }: {
     coordinatesList?: {}
     onPolygonClick?: Function
@@ -45,7 +45,7 @@ const index = (
       })
       optionsData[id] = []
       setOptionsData({ ...optionsData })
-    }
+    },
   }))
 
   // 初始化
@@ -73,7 +73,7 @@ const index = (
             color: colorArr[polygonList[i].farmlandId],
             type: polygonList[i].type,
             farmlandId: polygonList[i].farmlandId,
-            latlngs: polygonProcess(polygonList[i].coordinates)
+            latlngs: polygonProcess(polygonList[i].coordinates),
           } as any).addTo(map.current)
           // 添加事件
           polygon.on('click', function (e) {
@@ -109,7 +109,7 @@ const index = (
         style={{
           width: '100%',
           height: '100%',
-          background: 'rgba(255,255,255,0.6)'
+          background: 'rgba(255,255,255,0.6)',
         }}
       >
         <TileLayer

@@ -1,11 +1,8 @@
 import { lazy, Suspense, ReactNode } from 'react'
 import { Navigate } from 'react-router-dom'
-import { Assignment, Mood } from '@mui/icons-material'
-import SvgIcon from '@/components/SvgIcon'
 // 组件
 const Error = lazy(() => import('../pages/error/404'))
 const Main = lazy(() => import('../pages/main'))
-const Test = lazy(() => import('../pages/test'))
 // 组件懒加载
 const lazyload = (children: ReactNode): ReactNode => {
   return <Suspense>{children}</Suspense>
@@ -33,33 +30,27 @@ export interface Router {
   }>
 }
 
-// 菜单
-export const menuRouter: Router[] = []
-
 // 一般路由
 const router = [
   {
-    path: '/',
+    path: '/main',
     element: <Layout />,
     children: [
       {
-        index: true,
+        path: 'index',
         element: lazyload(<Main />),
-        name: '主页'
+        name: '主页',
       },
-      {
-        index: true,
-        path: 'test',
-        element: lazyload(<Test />),
-        name: '主页'
-      }
-    ]
+    ],
   },
-
+  {
+    path: '/',
+    element: <Navigate to="/main/index"></Navigate>,
+  },
   {
     path: '*',
-    element: lazyload(<Error />)
-  }
+    element: lazyload(<Error />),
+  },
 ]
 
 export default router
