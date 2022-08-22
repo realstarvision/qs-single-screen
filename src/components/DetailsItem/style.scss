@@ -1,0 +1,31 @@
+.DetailsItem{
+  margin-top: 5px;
+  padding: 12px 10px;
+  background: linear-gradient(90deg, #0B2860 0%, rgba(11,40,96,0.5000) 100%);
+  .title-bar{
+    display: flex;
+    align-items: center;
+    background: rgba(27, 76, 156, 0.46);
+    border: 1px solid #027FF3;
+    border-radius: 20px;
+    padding:  5px ;
+    .icon{
+      width: 24px;
+      margin-right: 10px;
+    }
+    .title{
+      font-size: 24px;
+      color: #FFFFFF;
+    }
+  }
+  .details-list{
+    padding-left: 20px;
+    margin-top: 10px;
+    li{
+      font-size: 21px;
+      font-family: Microsoft YaHei;
+      color: #FFFFFF;
+      line-height: 30px;
+    }
+  }
+}

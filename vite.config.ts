@@ -16,11 +16,11 @@ export default defineConfig({
   }),],
   server: {
     host: 'localhost',
-    port: 3001,
+    port: 8080,
     proxy: {
       '/api': {
-        // target: "http://192.168.148.33:8054",
-        target: "http://192.168.152.10:8054",
+        target: "http://192.168.148.33:8091",
+        // target: "http://192.168.152.10:8054",
         // target: "http://192.168.48.241.:8054",
         changeOrigin: true,
         cookieDomainRewrite: "",
@@ -36,22 +36,21 @@ export default defineConfig({
     }
   },
   css: {
-    // postcss: {
-    //   plugins: [
-    //     require('postcss-pxtorem')({ // 把px单位换算成rem单位
-    //       rootValue: 32, // 换算基数，默认100，这样的话把根标签的字体规定为1rem为50px,这样就可以从设计稿上量出多少个px直接在代码中写多上px了。
-    //       propList: ['*'], //属性的选择器，*表示通用
-    //       unitPrecision: 5, // 允许REM单位增长到的十进制数字,小数点后保留的位数。
-    //       exclude: /(node_module)/, // 默认false，可以（reg）利用正则表达式排除某些文件夹的方法
-    //     })
-    //   ]
-    // }
+    postcss: {
+      plugins: [
+        require('postcss-pxtorem')({ // 把px单位换算成rem单位
+          rootValue: 85, // 换算基数，默认100，这样的话把根标签的字体规定为1rem为50px,这样就可以从设计稿上量出多少个px直接在代码中写多上px了。
+          propList: ['*'], //属性的选择器，*表示通用
+          unitPrecision: 5, // 允许REM单位增长到的十进制数字,小数点后保留的位数。
+          // exclude: /(node_module)/, // 默认false，可以（reg）利用正则表达式排除某些文件夹的方法
+        })
+      ]
+    },
     // 配置全局css
     preprocessorOptions: {
       scss: {
         additionalData: '@import "@/assets/styles/global.scss";'
       }
     }
-  }
-
+  },
 })

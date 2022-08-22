@@ -7,7 +7,8 @@ import Theme from './Theme'
 import '@/i18n/config'
 import 'virtual:svg-icons-register'
 import './assets/index.css'
-import './assets/styles/date.scss'
+import '@/utils/flexible'
+import 'leaflet/dist/leaflet.css'
 
 let theme = responsiveFontSizes(Theme)
 ReactDOM.createRoot(document.getElementById('root')!).render(

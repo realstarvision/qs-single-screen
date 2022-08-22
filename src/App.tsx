@@ -2,25 +2,24 @@ import { useEffect, useState } from 'react'
 import { Navigate, Route, Routes, useLocation, useParams, useRoutes, useNavigate } from 'react-router-dom'
 import { Box, Grid } from '@mui/material'
 import router, { whiteList } from './router'
-import { getToken, getUserInfo } from '@/until/auth'
+import { getToken, getUserInfo } from '@/utils/auth'
 import './App.scss'
 
 function App() {
   let location = useLocation()
   let navigate = useNavigate()
-  let [routers, setRouters] = useState(router)
   // 路由守卫
-  useEffect(() => {
-    if (getToken() && getUserInfo()) {
-      if (location.pathname === '/login') {
-        navigate('/')
-      }
-    } else {
-      if (!whiteList.includes(location.pathname)) {
-        navigate('/login')
-      }
-    }
-  }, [location.pathname])
+  // useEffect(() => {
+  //   if (getToken() && getUserInfo()) {
+  //     if (location.pathname === '/login') {
+  //       navigate('/')
+  //     }
+  //   } else {
+  //     if (!whiteList.includes(location.pathname)) {
+  //       navigate('/login')
+  //     }
+  //   }
+  // }, [location.pathname])
 
   // useEffect(() => {
   //   let filterMenuDTOS = getUserInfo().filterMenuDTOS
@@ -29,7 +28,16 @@ function App() {
   //   }
   // }, [getUserInfo()])
 
-  return <Box className="app">{useRoutes(router)}</Box>
+  return (
+    <Box
+      className="app"
+      sx={{
+        minWidth: '1080px'
+      }}
+    >
+      {useRoutes(router)}
+    </Box>
+  )
 }
 
 // 判断

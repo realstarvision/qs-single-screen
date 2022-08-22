@@ -8,5 +8,9 @@
     "remember": "记住账号",
     "loginBtn": "登陆",
     "prompt": "请用钉钉扫码登陆"
+  },
+  "footer": {
+    "constructionDepartment": "建设单位：杭州市规划和自然资源局临平分局",
+    "technologyDepartment": "技术支撑单位：地位二空间技术（杭州）有限公司"
   }
 }

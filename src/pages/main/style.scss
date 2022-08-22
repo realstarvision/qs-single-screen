@@ -1,0 +1,155 @@
+.main-container{
+  position: relative;
+  width: 100%;
+  height: 995px;
+  .mask_layer{
+    background: rgba(0,0,0,0.6);
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 998
+  }
+  .content_data{
+    position: absolute;
+    top: 0;
+    padding-top: 80px;
+    margin-top: 0;
+    z-index: 999;
+  }
+  .grid-center-box{
+    position: absolute;
+    left:480px
+  }
+  .grid-left-box{
+    position: absolute;
+    left:0
+  }
+  .grid-right-box{
+    position: absolute;
+    right:0
+  }
+  .snackBar{
+    font-size: 16px;
+    color: #000000d9;
+    background: #fff;
+    padding: 10px 16px;
+    border-radius: 2px;
+    box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014, 0 9px 28px 8px #0000000d;
+    font-variant: tabular-nums;
+    list-style: none;
+    margin-top: 80px;
+  }
+}
+// 弹出框
+.dialog{
+  .box{
+    background: #1A274A;
+    width: 972px;
+    .header-bar{
+      text-align: center;
+      background: linear-gradient(0deg, #2453A3 0%, #4489CC 100%);
+      height: 65px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .title{
+        font-size: 30px;
+        font-family: Microsoft YaHei;
+        color: #FEFEFE;
+      }
+      .icon{
+        cursor: pointer;
+        width: 20px;
+        position: absolute;
+        right: 25px;
+        &:hover{
+          opacity: 0.7;
+        }
+      }
+    }
+    .centent{
+      min-height: 700px;
+      padding: 30px 124px;
+      ul{
+        background-color: RGBA(74, 80, 112, 1);
+        border: 1px solid #8C93A4;
+        li{
+          font-size: 18px;
+          font-family: Microsoft YaHei;
+          font-weight: 300;
+          color: #FEFEFE;
+          padding: 10px 20px;
+          border-bottom:  1px solid #8C93A4;
+          &:last-child{
+            border-bottom: none;
+          }
+        }
+      }
+      .grid-container{
+        margin-top: 20px;
+        font-family: Microsoft YaHei;
+        color: #FEFEFE;
+        .label{
+          font-size: 18px;
+        }
+        .content-font{
+          font-size: 16px;
+          font-weight: 300;
+        }
+        .problem_description{
+          margin-top: 20px;
+          .input{
+            width: 365px;
+          }
+        }
+        .gather_img{
+          margin-top: 30px;
+          img{
+            margin-top: 10px;
+            width: 220px;
+            height: 171px;
+          }
+        }
+        .eventType{
+          margin-top: 5px;
+          margin-bottom: 30px;
+        }
+        .select-box{
+          display: flex;
+          align-items: center;
+          margin-top: 15px;
+          select{
+            width: 378px !important;
+          }
+        }
+      }
+      .content-right{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .video{
+          width:100%; 
+          height:305px;
+          margin-top:10px;
+          border: 1px solid #fff;
+        }
+        .btn{
+          cursor: pointer;
+          width: 100%;
+          height: 50px;
+          font-size: 20px;
+          font-family: Microsoft YaHei;
+          color: #FEFEFE;
+          border: none;
+          background: #4388CB;
+          border-radius: 0px;
+          &:hover{
+            opacity: 0.7;
+          }
+        }
+      }
+    }
+  }
+}
+

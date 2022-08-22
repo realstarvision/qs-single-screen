@@ -8,5 +8,9 @@
     "remember": "Remember me",
     "loginBtn": "LOGIN",
     "prompt": "Please log in with DingTalk scan code"
+  },
+  "footer": {
+    "constructionDepartment": "",
+    "technologyDepartment": ""
   }
 }

@@ -1,0 +1,22 @@
+.mapTable{
+  border:1px solid #6C7AA1;
+  background-color: RGBA(49, 63, 101, 1);
+  tr,td,th{
+    color: #FDFDFD;
+    border:2px solid #6C7AA1;
+    text-align: center;
+    padding: 10px 2px;
+    font-size: 18px;
+    vertical-align: middle;
+  }
+  .tr{
+    th{
+      font-size: 20px;
+      font-weight: bold;
+    }
+  }
+  
+  .date{
+    font-size: 16px;
+  }
+}
