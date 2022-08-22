@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+import topLevelAwait from 'vite-plugin-top-level-await'
 // import { api, geo } from './src/configa.js'
 import path from 'path'
 
@@ -13,9 +14,16 @@ export default defineConfig({
     iconDirs: [path.resolve(process.cwd(), 'src/assets/icons/svg')],
     // 指定symbolId格式
     symbolId: 'icon-[name]',
-  }),],
+  }),
+  topLevelAwait({
+    // The export name of top-level await promise for each chunk module
+    promiseExportName: '__tla',
+    // The function to generate import names of top-level await promise in each chunk module
+    promiseImportName: i => `__tla_${i}`
+  })
+  ],
   server: {
-    host: 'localhost',
+    host: '0.0.0.0',
     port: 8080,
     proxy: {
       '/api': {
