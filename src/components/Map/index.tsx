@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useImperativeHandle, forwardRef, useState } f
 import L from 'leaflet'
 import { MapContainer, TileLayer, useMap, Polygon } from 'react-leaflet'
 import { polygonProcess } from '@/utils/data'
-import { number } from 'echarts'
 
 function MyComponent() {
   const map = useMap()
@@ -75,7 +74,7 @@ const index = (
             type: polygonList[i].type,
             farmlandId: polygonList[i].farmlandId,
             latlngs: polygonProcess(polygonList[i].coordinates)
-          }).addTo(map.current)
+          } as any).addTo(map.current)
           // 添加事件
           polygon.on('click', function (e) {
             handlePolygonClick(e)
@@ -91,8 +90,6 @@ const index = (
         }
         setOptionsData({ ...optionsData })
       }
-
-      console.log(888888)
     }
     // }, 0)
   }, [polygonList])

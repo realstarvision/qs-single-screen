@@ -1,5 +1,5 @@
 import { Snackbar, Box } from '@mui/material'
-import error from '@/assets/image/png/error.png'
+// import errorIcon from '@/assets/image/png/error.png'
 import './style.scss'
 
 function Index({
@@ -9,7 +9,7 @@ function Index({
   icon,
   background,
   color,
-  duration,
+  duration
 }: {
   open: boolean
   onClose: Function
@@ -34,10 +34,10 @@ function Index({
         className="snackbar"
         sx={{
           background: background || '',
-          color: color || '',
+          color: color || ''
         }}
       >
-        <img src={icon || error} />
+        <img src={icon} />
         <span> {message}</span>
       </Box>
     </Snackbar>
