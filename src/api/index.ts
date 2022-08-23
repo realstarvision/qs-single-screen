@@ -10,7 +10,8 @@ const api = {
   findCoordinateListByPage: '/farmland/findCoordinateListByPage',
   getFarmlandParcel: '/farmland/getFarmlandParcel',
   getFarmlandWarning: '/farmland/getFarmlandWarning',
-  getFarmlandAreaProblemList: '/farmland/getFarmlandAreaProblemList'
+  getFarmlandAreaProblemList: '/farmland/getFarmlandAreaProblemList',
+  getFarmlandBoundary: '/farmland/getFarmlandBoundary'
 }
 
 
@@ -101,6 +102,15 @@ export function FarmlandAreaProblemList() {
     method: 'get',
   })
 }
+
+/** 获取边界经纬度 */
+export function FarmlandBoundary() {
+  return request({
+    url: api.getFarmlandBoundary,
+    method: 'get',
+  })
+}
+
 
 
 

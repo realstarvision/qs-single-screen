@@ -2,22 +2,20 @@
 // 获取geojson文件中多个多边形数据
 export function polygonProcess(data) {
   let coordinatesArr
-  if(typeof data ==='string'){
-    coordinatesArr = JSON.parse(data)[0][0]
+  if(data){
+    if(typeof data ==='string'){
+      coordinatesArr = JSON.parse(data)[0][0]
+    }else{
+      coordinatesArr = data[0][0]
+    }
   }else{
-    coordinatesArr = data[0][0]
+    return []
   }
-
-
   const newCoordinatesArr = []
   for (let i = 0; i < coordinatesArr.length; i++) {
     newCoordinatesArr.push(reverseArray(coordinatesArr[i]))
   }
-
-
-  // if(typeof data !='string'){
-  //   console.log(newCoordinatesArr)
-  // }
+  console.log(newCoordinatesArr)
   return newCoordinatesArr
 }
 

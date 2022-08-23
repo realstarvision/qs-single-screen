@@ -12,10 +12,12 @@ const index = (
     onPolygonClick,
     latlngs,
     polygonList,
+    areaBorder,
   }: {
     coordinatesList?: {}
     onPolygonClick?: Function
     latlngs?: []
+    areaBorder?: any[]
     polygonList?: [
       {
         coordinates: string
@@ -52,11 +54,22 @@ const index = (
     }, 0)
   }, [])
 
+  // 监听区域边框
+  useEffect(() => {
+    setTimeout(() => {
+      if (map.current) {
+        if (areaBorder && areaBorder.length > 0) {
+          let polyline = L.polyline(areaBorder).addTo(map.current)
+          // map.current.fitBounds(polygon.getBounds())
+        }
+      }
+    }, 0)
+  }, [areaBorder])
+
   useEffect(() => {
     // setTimeout(() => {
     if (map.current) {
       if (polygonList.length > 0) {
-        console.log(polygonList)
         let arr = []
         let farmlandId = 0
         for (let i = 0; i < polygonList.length; i++) {

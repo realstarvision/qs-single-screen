@@ -8,7 +8,8 @@ import Left from './components/Left'
 import Right from './components/Right'
 import Centre from './components/Centre'
 import Map from '@/components/Map'
-import { CoordinateListByPage, FarmlandWarning } from '@/api'
+import { CoordinateListByPage, FarmlandWarning, FarmlandBoundary } from '@/api'
+import { polygonProcess } from '@/utils/data'
 import './style.scss'
 import close from '@/assets/image/png/close.png'
 import gather_img from '@/assets/image/default-image/gather_img.png'
@@ -42,10 +43,17 @@ export default function index() {
     townName: '',
     villageName: '',
   })
+  // 区域信息框
+  const [area, setArea] = useState([])
 
   // 初始化数据
   useEffect(() => {
     getFarmlandWarning()
+    // 获取地区边界
+    FarmlandBoundary().then((data: any) => {
+      setArea(polygonProcess(data.coordinates))
+      console.log(data.coordinates)
+    })
   }, [])
 
   // 查看详情按钮触发事件
@@ -122,7 +130,7 @@ export default function index() {
   return (
     <Box className="main-container">
       {/* 地图 */}
-      <Map ref={map} onPolygonClick={handlePolygonClick} polygonList={polygonList}></Map>
+      <Map ref={map} onPolygonClick={handlePolygonClick} polygonList={polygonList} areaBorder={area}></Map>
       {/* 左右中内容 */}
       <Grid container className="content_data">
         <Grid className="grid-left-box" xs={3}>
