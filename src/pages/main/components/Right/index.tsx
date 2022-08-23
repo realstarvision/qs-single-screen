@@ -12,7 +12,7 @@ import './right.scss'
 export default function Right({ onCheckDetails, onPlowlandChecked, onPlowlandUnchecked }) {
   const [farmlandControlList, setFarmlandControlList] = useState({
     farmlandOverviewVOList: [],
-    percentageComplete: ''
+    percentageComplete: '',
   })
   const [farmlandProblem, setFarmlandProblem] = useState({ groundTest: '', inspectReport: '', satellite: '' })
   // 初始化数据
@@ -30,7 +30,7 @@ export default function Right({ onCheckDetails, onPlowlandChecked, onPlowlandUnc
       })
       let obj = {
         farmlandOverviewVOList: list,
-        percentageComplete: data.percentageComplete
+        percentageComplete: data.percentageComplete,
       }
       setFarmlandControlList(obj)
     })
@@ -72,7 +72,7 @@ export default function Right({ onCheckDetails, onPlowlandChecked, onPlowlandUnc
       <Box className="top-box">
         <Grid container className="row">
           <Grid xs={7}>监测类型</Grid>
-          <Grid xs={3}>以认定</Grid>
+          <Grid xs={3}>已认定</Grid>
           <Grid xs={2}>状态</Grid>
         </Grid>
         {farmlandControlList.farmlandOverviewVOList.map((item, index) => {
@@ -84,7 +84,7 @@ export default function Right({ onCheckDetails, onPlowlandChecked, onPlowlandUnc
               sx={{
                 background: item.checked
                   ? 'linear-gradient(-90deg, #0943B3 0%, rgba(9,74,198,0.5000) 100%) !important'
-                  : ''
+                  : '',
               }}
               key={index}
             >
