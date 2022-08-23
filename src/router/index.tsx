@@ -5,7 +5,7 @@ const Error = lazy(() => import('../pages/error/404'))
 const Main = lazy(() => import('../pages/main'))
 // 组件懒加载
 const lazyload = (children: ReactNode): ReactNode => {
-  // return <Suspense>{children}</Suspense>
+  return <Suspense>{children}</Suspense>
 }
 
 import Layout from '@/components/Layout'
