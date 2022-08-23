@@ -3,13 +3,6 @@ import L from 'leaflet'
 import { MapContainer, TileLayer, useMap, Polygon } from 'react-leaflet'
 import { polygonProcess } from '@/utils/data'
 
-function MyComponent() {
-  const map = useMap()
-  console.log('map center:', map.getCenter())
-  console.log(map)
-  return null
-}
-
 // 颜色列表
 const colorArr = ['#fff', '#FFC000', '#dbd700', '#E47508', '#00DB54', '#db2c00', '#00dbd0']
 
@@ -33,7 +26,6 @@ const index = (
   },
   ref
 ) => {
-  const baseTile = useRef(null)
   const map = useRef(null)
   // const minimap = useMap()
   const [optionsData, setOptionsData] = useState({})
@@ -112,10 +104,7 @@ const index = (
           background: 'rgba(255,255,255,0.6)',
         }}
       >
-        <TileLayer
-          ref={baseTile}
-          url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
-        />
+        <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" />
       </MapContainer>
     </>
   )

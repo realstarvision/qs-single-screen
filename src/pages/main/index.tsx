@@ -40,7 +40,7 @@ export default function index() {
     administrativeRegion: '',
     farmlandArea: '',
     townName: '',
-    villageName: ''
+    villageName: '',
   })
 
   // 初始化数据
@@ -212,13 +212,13 @@ export default function index() {
                     select
                     size="small"
                     sx={{
-                      width: '75%'
+                      width: '75%',
                     }}
                   >
                     {fieldList.map((item, index) => (
                       <MenuItem
                         sx={{
-                          fontSize: '0.2rem'
+                          fontSize: '0.2rem',
                         }}
                         key={index}
                         value={item}
@@ -234,13 +234,13 @@ export default function index() {
                     select
                     size="small"
                     sx={{
-                      width: '75%'
+                      width: '75%',
                     }}
                   >
                     {departmentList.map((item, index) => (
                       <MenuItem
                         sx={{
-                          fontSize: '0.2rem'
+                          fontSize: '0.2rem',
                         }}
                         key={index}
                         value={item}
