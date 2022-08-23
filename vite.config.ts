@@ -49,6 +49,7 @@ export default defineConfig({
     },
     // 配置全局css
     preprocessorOptions: {
+
       scss: {
         additionalData: '@import "@/assets/styles/global.scss";'
       }
