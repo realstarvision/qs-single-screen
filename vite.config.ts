@@ -17,6 +17,7 @@ export default defineConfig({
   ],
   server: {
     host: '0.0.0.0',
+    // https: true,
     // port: 8080,
     proxy: {
       '/api': {
