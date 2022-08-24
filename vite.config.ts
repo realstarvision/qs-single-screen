@@ -29,6 +29,10 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, '')
       },
     },
+    hmr: {
+      protocol: 'ws',
+      host: '127.0.0.1'
+    }
   },
   resolve: {
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json'],

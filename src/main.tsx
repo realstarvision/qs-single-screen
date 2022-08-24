@@ -11,12 +11,12 @@ import '@/utils/flexible'
 import 'leaflet/dist/leaflet.css'
 
 let theme = responsiveFontSizes(Theme)
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   // <React.StrictMode>
   <ThemeProvider theme={theme}>
-    <BrowserRouter>
+    <HashRouter>
       <App />
-    </BrowserRouter>
+    </HashRouter>
   </ThemeProvider>
   // </React.StrictMode>
 )
