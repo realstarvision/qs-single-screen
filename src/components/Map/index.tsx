@@ -60,7 +60,7 @@ const index = (
       if (map.current) {
         if (areaBorder && areaBorder.length > 0) {
           let polyline = L.polyline(areaBorder).addTo(map.current)
-          // map.current.fitBounds(polygon.getBounds())
+          map.current.fitBounds(polyline.getBounds())
         }
       }
     }, 0)
