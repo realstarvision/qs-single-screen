@@ -1,97 +1,145 @@
-import React, { useEffect, useState } from 'react'
-import { Box } from '@mui/material'
+import React, { useEffect, useState, useRef } from 'react'
+import { Box, Divider } from '@mui/material'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableCell from '@mui/material/TableCell'
+import TableContainer from '@mui/material/TableContainer'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import Paper from '@mui/material/Paper'
 import './style.scss'
-import quit from '@/assets/image/png/quit.png'
-import { FarmlandAreaProblemList } from '@/api'
 
-interface List {
-  map(
-    arg0: (data: any) => JSX.Element
-  ): import('react-i18next').ReactI18NextChild | Iterable<import('react-i18next').ReactI18NextChild>
-  areaName: string
-  dtoList: Array<{
-    abarbeitungProblem: number
-    abarbeitungRate: string
-    accomplishProblem: number
-    nonProblem: number
-    normalProblem: number
-    problemType: number
-    proofProblem: number
-    suspectedProblem: number
-    verifyProblem: number
-  }>
+interface columns {
+  title: string
+  key: string
+  width?: string
 }
 
-export default function index({ onQuit }) {
-  const [listData, setListData] = useState<List | null>(null)
+export default function BasicTable({
+  columns,
+  data,
+  className,
+  onRowClick,
+}: {
+  columns: Array<columns>
+  data: any
+  className?: string
+  onRowClick?: Function
+}) {
+  let rollspeed = 80
+  let rolllinkk = useRef(null)
+  let rolllinkk1 = useRef(null)
+  let rolllinkk2 = useRef(null)
 
-  // 关闭事件
-  const handleQuit = () => {
-    onQuit()
+  useEffect(() => {
+    // rolllinkk2.current.innerHTML = rolllinkk1.current.innerHTML
+    function Marquee() {
+      // console.log(rolllinkk2.current.offsetTop)
+      // if (rolllinkk2.current.offsetTop - rolllinkk.current.scrollTop <= 3)
+      //   rolllinkk.current.scrollTop -= rolllinkk1.current.offsetHeight
+      // else {
+      //   rolllinkk.current.scrollTop++
+      // }
+      if (rolllinkk1.current.clientHeight - (rolllinkk.current.scrollTop + rolllinkk.current.clientHeight) <= 1)
+        rolllinkk.current.scrollTop = 0
+      else {
+        rolllinkk.current.scrollTop++
+      }
+    }
+    let MyMar = setInterval(Marquee, rollspeed)
+    rolllinkk.current.onmouseover = function () {
+      clearInterval(MyMar)
+    }
+    rolllinkk.current.onmouseout = function () {
+      MyMar = setInterval(Marquee, rollspeed)
+    }
+    return () => {
+      clearInterval(MyMar)
+    }
+  }, [])
+
+  /* 行点击事件 */
+  const handleRowClick = row => {
+    onRowClick(row)
   }
 
-  // 初始化数据
-  useEffect(() => {
-    FarmlandAreaProblemList().then((data: any) => {
-      setListData(data)
-    })
-  }, [])
   return (
     <Box className="table-box">
-      <Box className="table-box-bar">
-        <img src={quit} onClick={handleQuit} />
-      </Box>
-      <Box className="container">
-        <table width="100%" cellPadding={5} border={1} align="center" className="table">
-          <tr className="tr">
-            <th colSpan={2}>问题来源</th>
-            <th>疑似问题（个）</th>
-            <th>需现场核实（个）</th>
-            <th>已现场举证（个）</th>
-            <th>已完成认定（个）</th>
-            <th>认定正常（个）</th>
-            <th>认定"两非"（个）</th>
-            <th>完成整改（个）</th>
-            <th>整改率（%）</th>
-          </tr>
-          {listData &&
-            listData.map(data => {
-              return <Street data={data}></Street>
+      <table className={'content '} width="100%">
+        <thead>
+          <tr>
+            {columns.map(column => {
+              return (
+                <th
+                  style={{
+                    display: column.width ? 'inline-block' : '',
+                    width: column.width || '',
+                  }}
+                >
+                  {column.title}
+                </th>
+              )
             })}
-        </table>
-      </Box>
-    </Box>
-  )
-}
-
-function Street({ data }) {
-  return (
-    <>
-      {data.dtoList.map((item, index) => {
-        return (
-          <tr className="tr">
-            {index === 0 && (
-              <td
-                rowSpan={data.dtoList.length}
-                style={{
-                  verticalAlign: 'middle'
-                }}
-              >
-                {data.areaName}
-              </td>
-            )}
-            <td>{item.problemType === 1 ? '铁塔视频' : '田长视频'}</td>
-            <td>{item.suspectedProblem}</td>
-            <td>{item.verifyProblem}</td>
-            <td>{item.proofProblem}</td>
-            <td>{item.accomplishProblem}</td>
-            <td>{item.normalProblem}</td>
-            <td>{item.nonProblem}</td>
-            <td>{item.abarbeitungProblem}</td>
-            <td>{item.abarbeitungRate}</td>
           </tr>
-        )
-      })}
-    </>
+        </thead>
+      </table>
+      <Divider />
+      <div ref={rolllinkk} className={'rolllinkk ' + className}>
+        <div ref={rolllinkk1}>
+          <table className={'content '} width="100%">
+            {data.map((item, index) => {
+              return (
+                <tr
+                  style={{
+                    background: index % 2 != 0 ? '#002758' : '',
+                  }}
+                  onClick={() => handleRowClick(item)}
+                >
+                  {columns.map(column => {
+                    return (
+                      <td
+                        style={{
+                          display: column.width ? 'inline-block' : '',
+                          width: column.width || '',
+                        }}
+                      >
+                        {item[column.key]}
+                      </td>
+                    )
+                  })}
+                </tr>
+              )
+            })}
+          </table>
+        </div>
+        {/* <div ref={rolllinkk2}>
+          <table className={'content '} width="100%">
+            {data.map((item, index) => {
+              return (
+                <tr
+                  style={{
+                    background: index % 2 != 0 ? '#002758' : '',
+                  }}
+                  onClick={() => handleRowClick(item)}
+                >
+                  {columns.map(column => {
+                    return (
+                      <td
+                        style={{
+                          display: column.width ? 'inline-block' : '',
+                          width: column.width || '',
+                        }}
+                      >
+                        {item[column.key]}
+                      </td>
+                    )
+                  })}
+                </tr>
+              )
+            })}
+          </table>
+        </div> */}
+      </div>
+    </Box>
   )
 }

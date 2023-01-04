@@ -4,29 +4,30 @@ import { styled } from '@mui/material/styles'
 
 const Input = styled(TextField)({
   '& .MuiOutlinedInput-root': {
-    fontSize: '16px',
+    fontSize: '0.6rem',
     fontWeight: 300,
     color: '#fbfbfb',
     width: '100%',
+    background: '#023E86',
+    borderRadius: '2px',
+    height: '1.7rem',
     '& .MuiSelect-icon': {
-      fontSize: '0.3rem'
+      fontSize: '1rem',
     },
     '& fieldset': {
       border: 'none',
-      background: 'rgba(140, 147, 164, 1)',
+      // background: '#023E86',
       borderRadius: '2px',
-      opacity: '0.6'
-    }
+      // opacity: '0.6',
+    },
   },
 
-  '& .MuiPopover-root': {
-    '& .MuiPaper-root': {
-      background: '#353B4D',
-      '& .MuiMenu-list': {
-        height: '200px !important'
-      }
-    }
-  }
+  // '& .MuiPaper-root': {
+  //   background: '#023E86',
+  //   '& .MuiMenu-list': {
+  //     height: '200px !important',
+  //   },
+  // },
 })
 
 export default Input

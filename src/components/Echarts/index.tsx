@@ -1,12 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useImperativeHandle, forwardRef } from 'react'
 import { Box } from '@mui/material'
 import * as echarts from 'echarts'
 
-const Echart = ({ options, styleName }: any) => {
+const Echart = ({ options, styleName }: any, ref) => {
   // const { options, class } = props
   const style = styleName || { width: '100%', height: '100%' }
   const chartRef: any = useRef<HTMLDivElement>(null)
   const [myChart, setMyChart] = useState<any>(null)
+
+  useImperativeHandle(ref, () => ({
+    setOption,
+    myChart,
+  }))
 
   const resizeEcharts = () => {
     myChart.resize()
@@ -16,6 +21,13 @@ const Echart = ({ options, styleName }: any) => {
   useEffect(() => {
     setMyChart(echarts.init(chartRef.current))
   }, [])
+
+  // 设置Options
+  function setOption(option) {
+    if (option && myChart) {
+      myChart.setOption(option)
+    }
+  }
 
   // 改变时修改
   useEffect(() => {
@@ -31,10 +43,13 @@ const Echart = ({ options, styleName }: any) => {
 
   //
   useEffect(() => {
-    myChart && myChart.setOption(options)
-  }, [myChart, options])
+    if (myChart) {
+      myChart.clear()
+      myChart.setOption(options)
+    }
+  }, [myChart, JSON.stringify(options)])
 
   return <Box ref={chartRef} style={style} />
 }
 
-export default Echart
+export default forwardRef(Echart)

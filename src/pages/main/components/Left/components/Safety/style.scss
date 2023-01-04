@@ -1,0 +1,164 @@
+
+.safety{
+  .subsidence_risk_prediction{
+    margin-top: 5px;
+    overflow: hidden;
+    img{
+      width: 100%;
+    }
+    // height: 290px;
+    // position: relative;
+    // margin-top: 20px;
+    // img{
+    //   position: absolute;
+    //   top: -20px;
+    // }
+    .threat_level{
+      position: relative;
+      margin-top: 20px;
+      img{
+        top: -20px;
+        position: absolute;
+      
+      }
+      height: 230px;
+      .unit{
+        position: absolute;
+        left: 30px;
+        top: 25px;
+        z-index: 999;
+        color: #fff;
+        font-size: 11px;
+        opacity: 0.9;
+        font-weight: 300;
+      }
+    }
+
+    .subsidence_area{
+      position: relative;
+      .doughnut_chart{
+        width: 77%;
+        position: absolute;
+        left: 50%;
+        top:49%;
+        transform: translate(-50%,-50%);
+        margin-top: 22px;
+        margin-left: -1px;
+
+      }
+    }
+  }
+  .cumulative_settlement_volume{
+    height: 290px;
+    margin-top: 20px;
+    position: relative;
+    .map_tabs{
+      // position: absolute;
+      // width: 850px;
+      // width: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-top: 40px;
+      padding: 0 30px;
+      .tab{
+        cursor: pointer;
+        position: relative;
+        width: 282px;
+        height: 90px;
+        margin-top: 10px;
+        .icon{
+          width: 32px;
+          position: absolute;
+          left: 15px;
+          top: -4px;
+        }
+        .bg{
+        width: 100%;
+        height: 100%;
+        }
+        .name{
+          position: absolute;
+          max-width: 135px;
+          left: 65px;
+          top: 0px;
+        }
+        .last_child{
+          max-width: 100px;
+        }
+        
+      }
+    }
+    img{
+      position: absolute;
+      top: -20px;
+    }
+  }
+  .middle{
+    // margin-top: 0px;
+    margin-bottom: 15px;
+    position: relative;
+    .honeycomb_icon{
+      cursor: pointer;
+      width: 91.99px;
+      height: 79.67px;
+    }
+    .danger{
+      position: absolute;
+      top: 120px;
+      left:30px
+    }
+    .steady{
+      position: absolute;
+      top: 158px;
+      left: 97px;
+      z-index: 999;
+    }
+    .fluctuate{
+      position: absolute;
+      top: 120px;
+      left: 165px;
+    }
+    .img{
+      width: 100%;
+    }
+    
+    .threat_level{
+      position: relative;
+      margin-top: 20px;
+      img{
+        top: -20px;
+        position: absolute;
+        width: 100%;
+      }
+      height: 290px;
+      .unit{
+        position: absolute;
+        left: 30px;
+        top: 25px;
+        z-index: 999;
+        color: #fff;
+        font-size: 11px;
+        opacity: 0.9;
+        font-weight: 300;
+      }
+    }
+  }
+
+}
+
+.box{
+   width: 500px;
+   height: 600px; 
+   background-color: #fff;
+   .dialogTitle{
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    font-weight: 500;
+    color:#000;
+    border-bottom: 1px solid #aaaaaa;
+   }
+   .dialogContentText{
+    font-family: Roboto, Helvetica, Arial, sans-serif;
+    color:rgba(0,0,0,0.6)
+   }
+}

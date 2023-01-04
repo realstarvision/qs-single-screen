@@ -16,15 +16,24 @@
 
 
 
-.MuiMenu-root{
+.MuiPopover-root{
+  // background: #023E86 !important;
   .MuiPaper-root{
-    background: linear-gradient(180deg, #40485C 30%, #40485C 70%);
-    box-shadow: 0px 0px 24px 4px rgba(26,28,37,0.5);
+    // background: #023E86 !important;
+    // box-shadow: 0px 0px 24px 4px rgba(26,28,37,0.5);
     border-radius: 2px;
     backdrop-filter: blur(3px);
-    font-size: 16px;
+    // font-size: 16px;
+    .MuiMenuItem-root{
+      color: #bbb;
+          background: #023E86 !important;
+      span{
+        background: transparent !important;
+      }
+    }
     .Mui-selected{
-      background: #232734 !important;
+      background: #001B47 !important;
+      color: #fff;
     }
   }
   .MuiList-root{
@@ -34,3 +43,4 @@
     }
   }
 }
+

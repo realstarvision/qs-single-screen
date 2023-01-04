@@ -2,7 +2,9 @@ import { lazy, Suspense, ReactNode } from 'react'
 // 组件
 import Error from '../pages/error/404'
 import Main from '../pages/main'
+import Test from '@/pages/test'
 import Layout from '@/components/Layout'
+import Table from '@/components/Table'
 
 // 免登录名单
 export const whiteList = ['/login']
@@ -35,6 +37,11 @@ const router = [
       </Layout>
     ),
   },
+  // {
+  //   path: '/',
+  //   name: '测试',
+  //   element: <Test />,
+  // },
   {
     path: '*',
     element: <Error />,

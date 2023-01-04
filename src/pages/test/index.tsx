@@ -1,23 +1,17 @@
-import L from 'leaflet'
-import React, { useEffect, useRef } from 'react'
-import { MapContainer, TileLayer, useMap } from 'react-leaflet'
+import React, { useState } from 'react'
+import DateFnsUtils from '@date-io/date-fns' // choose your lib
+import { DatePicker, TimePicker, DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 
-export default function index() {
-  useEffect(() => {
-    let ele = document.getElementById('map')
-    var map = L.map(ele).setView([51.505, -0.09], 13)
-    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      maxZoom: 19,
-      attribution: '© OpenStreetMap'
-    }).addTo(map)
-  })
+function index() {
+  const [selectedDate, handleDateChange] = useState(new Date())
 
   return (
-    <div
-      id="map"
-      style={{
-        height: '180px'
-      }}
-    ></div>
+    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      <DatePicker value={selectedDate} onChange={handleDateChange} />
+      <TimePicker value={selectedDate} onChange={handleDateChange} />
+      <DateTimePicker value={selectedDate} onChange={handleDateChange} />
+    </MuiPickersUtilsProvider>
   )
 }
+
+export default index

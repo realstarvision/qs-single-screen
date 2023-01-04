@@ -1,34 +1,99 @@
 .main-container{
   position: relative;
   width: 100%;
-  height: 995px;
-  .mask_layer{
-    background: rgba(0,0,0,0.6);
+  height: 100%;
+  // height: 1920px;
+  box-shadow: inset 0px 0px 250px 30px #001031 !important;
+  overflow: auto;
+  
+  .grid-center-box,.grid-left-box,.grid-right-box{
     position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 998
-  }
-  .content_data{
-    position: absolute;
-    top: 0;
-    padding-top: 80px;
-    margin-top: 0;
+    top: 65px;
     z-index: 999;
   }
   .grid-center-box{
-    position: absolute;
-    left:480px
+    left:50%;
+    transform: translateX(-50%);
   }
   .grid-left-box{
-    position: absolute;
-    left:0
+    left:40px;
   }
   .grid-right-box{
-    position: absolute;
-    right:0
+    right:40px;
   }
+
+  // 退出乔司按钮
+  .quit_btn{
+    width: 124.01px;
+    height: 124.01px;
+    position: absolute;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    cursor: pointer;
+  }
+
+  // 进入乔司按钮
+  .enter_btn{
+    width: 250px;
+    height: 50px;
+    position: absolute;
+    bottom:  40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    cursor: pointer;
+    &:hover{
+      opacity: 0.9;
+    }
+  }
+
+  /* 菜单 */
+  .menu{
+    cursor: pointer;
+    position: absolute;
+    width: 35%;
+    max-width:970px ;
+    min-width: 650px;
+    left: 50%;
+    bottom: 60px;
+    transform: translateX(-50%);
+    z-index: 999;
+    display:  flex;
+    justify-content: space-around;
+    height: 175px;
+    .menu-item{
+      width: 30%;
+      display: flex;
+      justify-content: center;
+    }
+    img{
+      height: 100%;
+      // width: 200px;
+    }
+  }
+
+  /* 文件查看 */
+  .doc{
+    position: absolute;
+    top: 70px;
+    left: 710px;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    img{
+      width: 60px;
+      height: 60px;
+      cursor: pointer;
+      &:hover{
+        opacity: 0.8;
+      }
+    }
+  }
+
+
   .snackBar{
     font-size: 16px;
     color: #000000d9;
@@ -41,115 +106,14 @@
     margin-top: 80px;
   }
 }
-// 弹出框
-.dialog{
-  .box{
-    background: #1A274A;
-    width: 972px;
-    .header-bar{
-      text-align: center;
-      background: linear-gradient(0deg, #2453A3 0%, #4489CC 100%);
-      height: 65px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      .title{
-        font-size: 30px;
-        font-family: Microsoft YaHei;
-        color: #FEFEFE;
-      }
-      .icon{
-        cursor: pointer;
-        width: 20px;
-        position: absolute;
-        right: 25px;
-        &:hover{
-          opacity: 0.7;
-        }
-      }
-    }
-    .centent{
-      min-height: 700px;
-      padding: 30px 124px;
-      ul{
-        background-color: RGBA(74, 80, 112, 1);
-        border: 1px solid #8C93A4;
-        li{
-          font-size: 18px;
-          font-family: Microsoft YaHei;
-          font-weight: 300;
-          color: #FEFEFE;
-          padding: 10px 20px;
-          border-bottom:  1px solid #8C93A4;
-          &:last-child{
-            border-bottom: none;
-          }
-        }
-      }
-      .grid-container{
-        margin-top: 20px;
-        font-family: Microsoft YaHei;
-        color: #FEFEFE;
-        .label{
-          font-size: 18px;
-        }
-        .content-font{
-          font-size: 16px;
-          font-weight: 300;
-        }
-        .problem_description{
-          margin-top: 20px;
-          .input{
-            width: 365px;
-          }
-        }
-        .gather_img{
-          margin-top: 30px;
-          img{
-            margin-top: 10px;
-            width: 220px;
-            height: 171px;
-          }
-        }
-        .eventType{
-          margin-top: 5px;
-          margin-bottom: 30px;
-        }
-        .select-box{
-          display: flex;
-          align-items: center;
-          margin-top: 15px;
-          select{
-            width: 378px !important;
-          }
-        }
-      }
-      .content-right{
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        .video{
-          width:100%; 
-          height:305px;
-          margin-top:10px;
-          border: 1px solid #fff;
-        }
-        .btn{
-          cursor: pointer;
-          width: 100%;
-          height: 50px;
-          font-size: 20px;
-          font-family: Microsoft YaHei;
-          color: #FEFEFE;
-          border: none;
-          background: #4388CB;
-          border-radius: 0px;
-          &:hover{
-            opacity: 0.7;
-          }
-        }
-      }
-    }
-  }
+
+/* 沉降色带 */
+.colour_strip_safety{
+  width: 127px;
+  height: 152px;
+  position: absolute;
+  z-index: 999;
+  right: 720px;
+  bottom: 90px;
 }
 
