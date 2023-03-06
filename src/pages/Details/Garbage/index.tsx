@@ -8,7 +8,6 @@ import well_lid_title from '@/assets/image/well_lid/well_lid_title.png'
 import time_bar from '@/assets/image/keyAreas/time_bar.png'
 import Echarts from '@/components/Echarts'
 import rectangle from '@/assets/image/map/rectangle.png'
-import back_btn from '@/assets/image/png/back_btn.png'
 import { garbageSorting } from '@/components/Map/json'
 import './style.scss'
 import '../common.scss'
@@ -30,6 +29,7 @@ export default function index({ onBack, garbageId, onItemClick }) {
     coordinates: [],
     address: '',
     video: '',
+    position: '',
   })
   // 参数
   const [formParams, setFormParams] = useState({
@@ -180,7 +180,7 @@ export default function index({ onBack, garbageId, onItemClick }) {
               marginTop: '30px',
             }}
           /> */}
-          <p className="mt font">地址：{data.address}</p>
+          <p className="mt font">地址：{data.position}</p>
           <p
             className="mt font"
             style={{
@@ -212,7 +212,7 @@ export default function index({ onBack, garbageId, onItemClick }) {
         </Box>
       </Fade>
 
-      <img src={back_btn} className="back_btn" onClick={handleBack} />
+      {/* <img src={back_btn} className="back_btn" onClick={handleBack} /> */}
     </>
   )
 }

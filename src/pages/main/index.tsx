@@ -4,9 +4,7 @@ import { setWms } from '@/store/module/wms'
 import { setDangerLevel, reset } from '@/store/module/dangerLevel'
 import { reset as resetNetworkMonitoring } from '@/store/module/networkMonitoring'
 import { useSelector, useDispatch } from 'react-redux'
-import Center from './components/Center'
-import Left from './components/Left'
-import Right from './components/Right'
+import Module from './components/module'
 import Map from '@/components/Map'
 import KeyAreasDetails from '@/pages/Details/KeyAreas'
 import WellLid from '@/pages/Details/WellLid'
@@ -228,18 +226,19 @@ export default function index() {
       {enterQS && (
         <>
           {/* 退出乔司区域按钮 */}
-          {!keyAreaId && !wellLidId && !waterloggingId && !garbageId && (
+          {/* {!keyAreaId && !wellLidId && !waterloggingId && !garbageId && (
             <img src={quitImg} className="quit_btn" onClick={handleQuitClick} />
-          )}
+          )} */}
 
           {/* 文件查看 */}
-          <Box className="doc">
+          {/* <Box className="doc">
             <img src={doc_file} onClick={() => handleDocClick(1)}></img>
             <img src={doc_flow} onClick={() => handleDocClick(2)}></img>
-          </Box>
+          </Box> */}
 
           {/* 左右中内容 */}
-          <Box
+          <Module active={active} onDeviceRowClick={handleCheckDetails}></Module>
+          {/* <Box
             className="grid-left-box"
             style={{
               visibility: keyAreaId || wellLidId || waterloggingId || garbageId ? 'hidden' : 'visible',
@@ -254,7 +253,7 @@ export default function index() {
             }}
           >
             <Right active={active} onDeviceRowClick={handleDeviceRowClick}></Right>
-          </Box>
+          </Box> */}
 
           {/* 菜单 */}
           <Box
@@ -307,7 +306,7 @@ export default function index() {
       {enterQS && active === 0 && <img src={colour_strip_safety} className="colour_strip_safety" />}
 
       {/* 查看文档的弹窗 */}
-      <FlowImageDialog ref={flowImageDialogRef}></FlowImageDialog>
+      {/* <FlowImageDialog ref={flowImageDialogRef}></FlowImageDialog> */}
     </Box>
   )
 }

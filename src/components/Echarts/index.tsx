@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useImperativeHandle, forwardRef } f
 import { Box } from '@mui/material'
 import * as echarts from 'echarts'
 
-const Echart = ({ options, styleName }: any, ref) => {
+const Echart = ({ options, styleName, onMouseEnter, onMouseLeave }: any, ref) => {
   // const { options, class } = props
   const style = styleName || { width: '100%', height: '100%' }
   const chartRef: any = useRef<HTMLDivElement>(null)
@@ -41,7 +41,14 @@ const Echart = ({ options, styleName }: any, ref) => {
     }
   }, [myChart])
 
-  //
+  //鼠标移动
+  const handleMouse = state => {
+    if (state === 'enter') {
+      onMouseEnter()
+    } else if (state === 'leave') {
+      onMouseLeave()
+    }
+  }
   useEffect(() => {
     if (myChart) {
       myChart.clear()
@@ -49,7 +56,14 @@ const Echart = ({ options, styleName }: any, ref) => {
     }
   }, [myChart, JSON.stringify(options)])
 
-  return <Box ref={chartRef} style={style} />
+  return (
+    <Box
+      ref={chartRef}
+      style={style}
+      onMouseEnter={() => handleMouse('enter')}
+      onMouseLeave={() => handleMouse('leave')}
+    />
+  )
 }
 
 export default forwardRef(Echart)

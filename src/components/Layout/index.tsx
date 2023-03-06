@@ -30,7 +30,13 @@ export default function index({ children }: { children?: any }) {
   // }, [])
 
   return (
-    <Box id="screen" className="screen">
+    <Box
+      id="screen"
+      className="screen"
+      style={{
+        minWidth: '1024px',
+      }}
+    >
       <Header></Header>
       {children ? children : <Outlet />}
     </Box>

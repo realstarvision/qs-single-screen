@@ -271,7 +271,6 @@ const index = (
           transparent={true}
           format="image/png"
           version="1.1.0"
-          // TILED={true}
         />
 
         {/* 乔司底图 */}
@@ -306,8 +305,9 @@ const index = (
                   <Popup minWidth={90} closeButton={false} className="marker_popup">
                     {/* <span>{item.title}</span> */}
                     <span>名称：{item.code}</span>
-                    <span>经度：{item.coordinates[1].toFixed(6)}</span>
-                    <span>维度：{item.coordinates[0].toFixed(6)}</span>
+                    {/* <span>经度：{item.coordinates[1].toFixed(6)}</span>
+                    <span>维度：{item.coordinates[0].toFixed(6)}</span> */}
+                    <span>地址：{item.position}</span>
                   </Popup>
                 </Marker>
               ))}
@@ -329,8 +329,9 @@ const index = (
                   <Popup minWidth={90} closeButton={false} className="marker_popup">
                     {/* <span>{item.title}</span> */}
                     <span>名称：{item.code}</span>
-                    <span>经度：{item.coordinates[1].toFixed(6)}</span>
-                    <span>维度：{item.coordinates[0].toFixed(6)}</span>
+                    {/* <span>经度：{item.coordinates[1].toFixed(6)}</span>
+                    <span>维度：{item.coordinates[0].toFixed(6)}</span> */}
+                    <span>地址：{item.position}</span>
                   </Popup>
                 </Marker>
               ))}
@@ -351,8 +352,9 @@ const index = (
                 >
                   <Popup minWidth={90} closeButton={false} className="marker_popup">
                     <span>名称：{item.code}</span>
-                    <span>经度：{item.coordinates[1].toFixed(6)}</span>
-                    <span>维度：{item.coordinates[0].toFixed(6)}</span>
+                    {/* <span>经度：{item.coordinates[1].toFixed(6)}</span>
+                    <span>维度：{item.coordinates[0].toFixed(6)}</span> */}
+                    <span>地址：{item.position}</span>
                   </Popup>
                 </Marker>
               ))}
@@ -373,8 +375,9 @@ const index = (
                 >
                   <Popup minWidth={90} closeButton={false} className="marker_popup">
                     <span>名称：{item.code}</span>
-                    <span>经度：{item.coordinates[1].toFixed(6)}</span>
-                    <span>维度：{item.coordinates[0].toFixed(6)}</span>
+                    {/* <span>经度：{item.coordinates[1].toFixed(6)}</span>
+                    <span>维度：{item.coordinates[0].toFixed(6)}</span> */}
+                    <span>地址：{item.position}</span>
                   </Popup>
                 </Marker>
               ) : (
@@ -398,8 +401,9 @@ const index = (
                 >
                   <Popup minWidth={90} closeButton={false} className="marker_popup">
                     <span>名称：{item.code}</span>
-                    <span>经度：{item.coordinates[1].toFixed(6)}</span>
-                    <span>维度：{item.coordinates[0].toFixed(6)}</span>
+                    {/* <span>经度：{item.coordinates[1].toFixed(6)}</span>
+                    <span>维度：{item.coordinates[0].toFixed(6)}</span> */}
+                    <span>地址：{item.position}</span>
                   </Popup>
                 </Marker>
               ) : (
@@ -423,8 +427,9 @@ const index = (
                   >
                     <Popup minWidth={90} closeButton={false} className="marker_popup">
                       <span>名称：{item.title}</span>
-                      <span>经度：{item.coordinates[1].toFixed(6)}</span>
-                      <span>维度：{item.coordinates[0].toFixed(6)}</span>
+                      {/* <span>经度：{item.coordinates[1].toFixed(6)}</span>
+                      <span>维度：{item.coordinates[0].toFixed(6)}</span> */}
+                      <span>地址：{item.position}</span>
                     </Popup>
                   </Marker>
                 )
@@ -446,8 +451,9 @@ const index = (
                   >
                     <Popup minWidth={90} closeButton={false} className="marker_popup">
                       <span>名称：{item.title}</span>
-                      <span>经度：{item.coordinates[1].toFixed(6)}</span>
-                      <span>维度：{item.coordinates[0].toFixed(6)}</span>
+                      {/* <span>经度：{item.coordinates[1].toFixed(6)}</span>
+                      <span>维度：{item.coordinates[0].toFixed(6)}</span> */}
+                      <span>地址：{item.position}</span>
                     </Popup>
                   </Marker>
                 )
@@ -470,8 +476,9 @@ const index = (
                   >
                     <Popup minWidth={90} closeButton={false} className="marker_popup">
                       <span>名称：{item.title}</span>
-                      <span>经度：{item.coordinates[1].toFixed(6)}</span>
-                      <span>维度：{item.coordinates[0].toFixed(6)}</span>
+                      {/* <span>经度：{item.coordinates[1].toFixed(6)}</span>
+                      <span>维度：{item.coordinates[0].toFixed(6)}</span> */}
+                      <span>地址：{item.position}</span>
                     </Popup>
                   </Marker>
                 )
@@ -493,8 +500,9 @@ const index = (
                   >
                     <Popup minWidth={90} closeButton={false} className="marker_popup">
                       <span>名称：{item.code}</span>
-                      <span>经度：{item.coordinates[1].toFixed(6)}</span>
-                      <span>维度：{item.coordinates[0].toFixed(6)}</span>
+                      {/* <span>经度：{item.coordinates[1].toFixed(6)}</span>
+                      <span>维度：{item.coordinates[0].toFixed(6)}</span> */}
+                      <span>地址：{item.position}</span>
                       <span>高度：{item.height}</span>
                     </Popup>
                   </Marker>
@@ -516,8 +524,9 @@ const index = (
                   >
                     <Popup minWidth={90} closeButton={false} className="marker_popup">
                       <span>名称：{item.code}</span>
-                      <span>经度：{item.coordinates[1].toFixed(6)}</span>
-                      <span>维度：{item.coordinates[0].toFixed(6)}</span>
+                      {/* <span>经度：{item.coordinates[1].toFixed(6)}</span>
+                      <span>维度：{item.coordinates[0].toFixed(6)}</span> */}
+                      <span>地址：{item.position}</span>
                     </Popup>
                   </Marker>
                 )

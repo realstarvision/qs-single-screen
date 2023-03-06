@@ -14,9 +14,9 @@ import { colourStripData, echartTabs, hazardLevel, tabs, detailsInfo } from './j
 
 // 图片
 import waterlogging_title from '@/assets/image/charts/waterlogging_title.png'
-import back_btn from '@/assets/image/png/back_btn.png'
+// import back_btn from '@/assets/image/png/back_btn.png'
 import buttonIcon from '@/assets/image/png/button_icon.png'
-import buttonActiveIcon from '@/assets/image/png/button_active_icon.png'
+// import buttonActiveIcon from '@/assets/image/png/button_active_icon.png'
 import colour_strip from '@/assets/image/png/colour_strip.png'
 import colour_strip_DSM from '@/assets/image/png/colour_strip_DSM.png'
 
@@ -43,6 +43,7 @@ function index({ onBack, waterloggingId, onItemClick, onWaterloggingActive }, re
     coordinates: [],
     acreage: '',
     mapImg: '',
+    position: '',
   })
   // 参数
   const [formParams, setFormParams] = useState({
@@ -238,6 +239,7 @@ function index({ onBack, waterloggingId, onItemClick, onWaterloggingActive }, re
                   {data.coordinates.length > 0 ? data.coordinates[1] : ''}
                 </div>
               </p>
+              <p className="mt font">详细地址：{data.position}</p>
               <p className="mt font">易涝面积：{data.acreage}</p>
               <p className="mt font">地理显示</p>
               <img
@@ -308,13 +310,13 @@ function index({ onBack, waterloggingId, onItemClick, onWaterloggingActive }, re
       <Box className="waterlogging_tabs">
         {tabs.map(tab => (
           <Box className="tab" onClick={() => handleTabClick(tab.id)}>
-            <img src={tab.id == active ? buttonActiveIcon : buttonIcon} />
+            {/* <img src={tab.id == active ? buttonActiveIcon : buttonIcon} /> */}
             <p style={{ color: tab.id == active ? '#61A8FC' : '#fff' }}>{tab.title}</p>
           </Box>
         ))}
       </Box>
       {/* 返回按钮 */}
-      <img src={back_btn} className="back_btn" onClick={handleBack} />
+      {/* <img src={back_btn} className="back_btn" onClick={handleBack} /> */}
 
       {/* 色带 */}
       {(active === 3 || active === 0) && (

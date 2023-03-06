@@ -8,7 +8,7 @@ import well_lid_title from '@/assets/image/well_lid/well_lid_title.png'
 import time_bar from '@/assets/image/keyAreas/time_bar.png'
 import Echarts from '@/components/Echarts'
 import rectangle from '@/assets/image/map/rectangle.png'
-import back_btn from '@/assets/image/png/back_btn.png'
+// import back_btn from '@/assets/image/png/back_btn.png'
 import { wellLid1, wellLid2 } from '@/components/Map/json'
 import './style.scss'
 import '../common.scss'
@@ -32,6 +32,7 @@ export default function index({ onBack, wellLidId, onItemClick }) {
     place: '',
     joinTime: '',
     alarmTime: '',
+    position: '',
   })
   // 参数
   const [formParams, setFormParams] = useState({
@@ -212,7 +213,7 @@ export default function index({ onBack, wellLidId, onItemClick }) {
           /> */}
           <p className="mt font">入网时间：{data.joinTime}</p>
           <p className="mt font">设备类型：{data.text}</p>
-          <p className="mt font">投放地址：{data.place}</p>
+          <p className="mt font">投放地址：{data.position}</p>
           <p
             className="mt font"
             style={{
@@ -254,7 +255,7 @@ export default function index({ onBack, wellLidId, onItemClick }) {
       </Fade>
 
       {/* <img src={time_bar} className="time_bar" /> */}
-      <img src={back_btn} className="back_btn" onClick={handleBack} />
+      {/* <img src={back_btn} className="back_btn" onClick={handleBack} /> */}
     </>
   )
 }

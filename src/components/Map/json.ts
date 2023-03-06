@@ -39,6 +39,7 @@ export let keyArea = [
   {
     id: 1,
     coordinates: [30.330256468346004, 120.279060673898],
+    position: '杭州市上城区三村寺东北约271米',
     icon: point_danger,
     defaultIcon: point_default,
     activeIcon: point_danger,
@@ -73,6 +74,7 @@ export let keyArea = [
   }, {
     id: 2,
     coordinates: [30.330431920963775, 120.28149604797365],
+    position: '杭州市上城区三角佃34-1正东方向118米乔司第一幼儿园胜稼分园西南约167米',
     icon: point_fluctuate,
     defaultIcon: point_default,
     activeIcon: point_danger,
@@ -119,6 +121,7 @@ export let dangerLevelPointData = [
     code: 'S01',
     address: '新街社区',
     state: '离线',
+    position: '杭州市临平区永西村云家桥146号通富设备安装公司西北约194米'
   },
   {
     coordinates: [30.36436, 120.27436],
@@ -127,6 +130,8 @@ export let dangerLevelPointData = [
     code: 'S02',
     address: '新街社区',
     state: '在线',
+    position: '杭州市临平区永西106正南方向35米鸿庆楼饭店'
+
   }, {
     coordinates: [30.35982, 120.28005],
     icon: point_safety,
@@ -134,13 +139,15 @@ export let dangerLevelPointData = [
     code: 'S03',
     address: '新街社区',
     state: '在线',
+    position: '杭州市临平区陆家浜大院东北约240米'
   }, {
     code: 'S04',
     address: '新街社区',
     state: '在线',
     coordinates: [30.33904, 120.28394],
     icon: point_fluctuate,
-    type: "fluctuate"
+    type: "fluctuate",
+    position: '杭州市临平区停车场东南约162米'
   },
   {
     code: 'S05',
@@ -148,7 +155,8 @@ export let dangerLevelPointData = [
     state: '在线',
     coordinates: [30.35657, 120.27404],
     icon: point_fluctuate,
-    type: "fluctuate"
+    type: "fluctuate",
+    position: '杭州市临平区永中路西南约379米'
   }
 ]
 
@@ -158,6 +166,7 @@ export let roadPoinList = [
   {
     id: 3,
     coordinates: [30.341578759900518, 120.28653864218121],
+    position: '杭州市临平区乔莫西路8号杭州开瑞汽车修理厂',
     icon: point_danger,
     defaultIcon: point_default,
     activeIcon: point_danger,
@@ -183,6 +192,7 @@ export let roadPoinList = [
   {
     id: 4,
     coordinates: [30.341361251671447, 120.28926376836137],
+    position: '杭州市临平区乔司街道浙江省杭州市临平区乔司街道新街社区逸家花苑3幢东南约71米',
     icon: point_fluctuate,
     defaultIcon: point_default,
     activeIcon: point_danger,
@@ -207,6 +217,7 @@ export let roadPoinList = [
   }, {
     id: 5,
     coordinates: [30.351527604216184, 120.29540072980983],
+    position: '杭州市临平区乔井路1-1临平水务公司乔司分公司东北约124米',
     icon: point_fluctuate,
     defaultIcon: point_default,
     activeIcon: point_danger,
@@ -236,6 +247,7 @@ export let bridgePoinList = [
   {
     id: 6,
     coordinates: [30.333148110540282, 120.28691415133922],
+    position: '杭州市临平区石塘东路1号维也纳酒店(杭州九堡四季青店)东南约63米',
     icon: point_danger,
     defaultIcon: point_default,
     activeIcon: point_danger,
@@ -261,6 +273,7 @@ export let bridgePoinList = [
   {
     id: 7,
     coordinates: [30.34763002851964, 120.2807879845444],
+    position: '杭州市临平区乔中永和苑西门东南约143米',
     icon: point_fluctuate,
     defaultIcon: point_default,
     activeIcon: point_danger,
@@ -285,6 +298,7 @@ export let bridgePoinList = [
   }, {
     id: 8,
     coordinates: [30.357142907355016, 120.28300885647036],
+    position: '杭州市临平区永和西北约183米',
     icon: point_fluctuate,
     defaultIcon: point_default,
     activeIcon: point_danger,
@@ -314,6 +328,7 @@ export let bridgePoinList = [
 export let networkMonitoring = [
   {
     coordinates: [30.37118, 120.26852],
+    position: '杭州市临平区永西村云家桥146号通富设备安装公司西北约194米',
     code: 'S01',
     address: '新街社区',
     state: '在线',
@@ -324,6 +339,7 @@ export let networkMonitoring = [
   },
   {
     coordinates: [30.36436, 120.27436],
+    position: '杭州市临平区永西106正南方向35米鸿庆楼饭店',
     code: 'S02',
     address: '新街社区',
     state: '离线',
@@ -333,6 +349,7 @@ export let networkMonitoring = [
     depthOfWater: '3m'
   }, {
     coordinates: [30.35982, 120.28005],
+    position: '杭州市临平区陆家浜大院东北约240米',
     code: 'S03',
     address: '航海路社区',
     state: '在线',
@@ -342,6 +359,7 @@ export let networkMonitoring = [
     depthOfWater: '6m'
   }, {
     coordinates: [30.33904, 120.28394],
+    position: '杭州市临平区停车场东南约162米',
     code: 'S04',
     address: '乔司社区',
     state: '在线',
@@ -352,6 +370,7 @@ export let networkMonitoring = [
   },
   {
     coordinates: [30.35657, 120.27404],
+    position: '杭州市临平区永中路西南约379米',
     code: 'S05',
     address: '航海路社区',
     state: '在线',
@@ -369,6 +388,7 @@ export let wellLid1 = [
     id: 1,
     title: 'SN10001',
     coordinates: [30.357243, 120.276456],
+    position: '杭州市临平区陆家浜大院西南约264米',
     text: '污水井',
     icon: sewage_well_green,
     state: 1,
@@ -380,6 +400,7 @@ export let wellLid1 = [
     id: 2,
     title: 'SN10002',
     coordinates: [30.359680, 120.258714],
+    position: '杭州市临平区和睦桥3组27号正西方向86米和睦桥村农贸市场',
     text: '污水井',
     icon: sewage_well_yellow,
     state: 2,
@@ -390,6 +411,7 @@ export let wellLid1 = [
     id: 3,
     title: 'SN10003',
     coordinates: [30.343129, 120.267082],
+    position: '杭州市临平区牛头基',
     text: '污水井',
     icon: sewage_well_red,
     state: 3,
@@ -405,6 +427,7 @@ export let wellLid2 = [
     id: 4,
     title: 'SN10004',
     coordinates: [30.343261, 120.277161],
+    position: '杭州市临平区牛头基',
     text: '雨水井',
     icon: gully_pot_green,
     state: 1,
@@ -416,6 +439,7 @@ export let wellLid2 = [
     id: 5,
     title: 'SN10005',
     coordinates: [30.336294, 120.287168],
+    position: '杭州市临平区乔司街道杭海路1605号东北方向150米杭州市公安局临平区分局乔司派出所消控中队',
     text: '雨水井',
     icon: gully_pot_yellow,
     state: 2,
@@ -426,6 +450,7 @@ export let wellLid2 = [
     id: 6,
     title: 'SN10006',
     coordinates: [30.354174, 120.281764],
+    position: '杭州市临平区乔司街道永玄路135号杭州市临平区乔司中学电动汽车充电站西北约101米',
     text: '雨水井',
     icon: gully_pot_red,
     state: 3,
@@ -453,6 +478,7 @@ export let waterlogging = [
     id: 1,
     title: 'SN10008',
     coordinates: [30.35163183455712, 120.29352850257808],
+    position: '杭州市临平区乔莫东路65嘉丽土水漆',
     icon: waterlogging_yellow,
     state: 2,
     place: '浙江省杭州市临平区乔司街道',
@@ -464,6 +490,7 @@ export let waterlogging = [
     id: 2,
     title: 'SN10009',
     coordinates: [30.347310808784187, 120.28241869399764],
+    position: '杭州市临平区博卡路18-37纸包鱼大排档乔司店',
     icon: waterlogging_red,
     state: 3,
     place: '浙江省杭州市临平区乔司街道',
@@ -478,6 +505,7 @@ export let waterlogging = [
 export let wellLid3 = [
   {
     coordinates: [30.338362, 120.277061],
+    position: '杭州市临平区朝阳村三村一组195号-1正东方向11米西南约214米',
     code: 'S01',
     address: '新街社区',
     state: '在线',
@@ -488,6 +516,7 @@ export let wellLid3 = [
   },
   {
     coordinates: [30.352939, 120.278695],
+    position: '杭州市临平区葛家车东北约145米',
     code: 'S02',
     address: '新街社区',
     state: '离线',
@@ -497,6 +526,7 @@ export let wellLid3 = [
     depthOfWater: '3m'
   }, {
     coordinates: [30.332691, 120.282631],
+    position: '杭州市临平区三角佃34-1正东方向118米乔司第一幼儿园胜稼分园东北约134米',
     code: 'S03',
     address: '航海路社区',
     state: '在线',
@@ -506,6 +536,7 @@ export let wellLid3 = [
     depthOfWater: '6m'
   }, {
     coordinates: [30.350838, 120.286534],
+    position: '杭州市临平区博卡路18-37纸包鱼大排档乔司店',
     code: 'S04',
     address: '乔司社区',
     state: '在线',
@@ -521,6 +552,7 @@ export let garbageSorting = [
   {
     id: 1,
     coordinates: [30.37112, 120.26853],
+    position: '杭州市临平区永西村云家桥146号通富设备安装公司西北约192米',
     code: 'S01',
     address: '乔司社区',
     state: '在线',
@@ -532,6 +564,7 @@ export let garbageSorting = [
   {
     id: 2,
     coordinates: [30.37555, 120.27555],
+    position: '杭州市临平区东桥头西南约159米',
     code: 'S02',
     address: '新街社区',
     state: '在线',
@@ -542,6 +575,7 @@ export let garbageSorting = [
   }, {
     id: 3,
     coordinates: [30.35222, 120.26555],
+    position: '杭州市临平区葛家车村12组30~31号东南方向105米西北约219米',
     code: 'S03',
     address: '航海路社区',
     state: '在线',
@@ -552,6 +586,7 @@ export let garbageSorting = [
   {
     id: 4,
     coordinates: [30.35111, 120.28344],
+    position: '杭州市临平区乔司街道乔莫西路111号浙江众美汽车有限公司',
     code: 'S04',
     address: '新街社区',
     state: '离线',
@@ -562,6 +597,7 @@ export let garbageSorting = [
   {
     id: 5,
     coordinates: [30.34666, 120.28855],
+    position: '杭州市临平区乔司街道浙江省杭州市临平区乔司街道新街社区东冠逸景花苑14幢西北约134米',
     code: 'S05',
     address: '新街社区',
     state: '离线',
@@ -571,6 +607,7 @@ export let garbageSorting = [
   }, {
     id: 6,
     coordinates: [30.34886, 120.26999],
+    position: '杭州市临平区葛家车村20组15号华杰拉链',
     code: 'S06',
     address: '新街社区',
     state: '离线',
@@ -586,36 +623,42 @@ export let DSMHeightPoint = [
   {
     id: 1,
     coordinates: [30.369926670519025, 120.2786421405614],
+    position: '杭州市临平区太公堂路西南约100米',
     height: '130m',
     code: 'SN1010',
     icon: point_default
   }, {
     id: 2,
     coordinates: [30.36688048065069, 120.2742325519206],
+    position: '杭州市临平区陈公桥4东南方向50米东北约233米',
     height: '85m',
     code: 'SN1011',
     icon: point_default
   }, {
     id: 3,
     coordinates: [30.349037963839162, 120.27749415510306],
+    position: '杭州市临平区葛家车村16组63号杭州下沙欣怡服饰东北约198米',
     height: '90m',
     code: 'SN1012',
     icon: point_default
   }, {
     id: 4,
     coordinates: [30.35791710560762, 120.24816148029582],
+    position: '杭州市临平区乔司公铁立交桥东北约138米',
     height: '65m',
     code: 'SN1013',
     icon: point_default
   }, {
     id: 5,
     coordinates: [30.361438436371447, 120.26962991827136],
+    position: '杭州市临平区永西村委会西南约142米',
     height: '40m',
     code: 'SN1014',
     icon: point_default
   }, {
     id: 6,
     coordinates: [30.367344729748375, 120.2573347091675],
+    position: '杭州市临平区横铁线东南约354米',
     height: '110m',
     code: 'SN1015',
     icon: point_default

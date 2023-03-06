@@ -7,7 +7,7 @@ import time_bar from '@/assets/image/keyAreas/time_bar.png'
 import { circularRingOption, linearGradientOption } from './option'
 import Echarts from '@/components/Echarts'
 import rectangle from '@/assets/image/map/rectangle.png'
-import back_btn from '@/assets/image/png/back_btn.png'
+// import back_btn from '@/assets/image/png/back_btn.png'
 import { keyArea as keyArealist, roadPoinList, bridgePoinList } from '@/components/Map/json'
 import './style.scss'
 import '../common.scss'
@@ -145,7 +145,7 @@ export default function index({ onBack, keyAreaId, onItemClick, type }) {
       </Fade>
 
       <img src={time_bar} className="time_bar" />
-      <img src={back_btn} className="back_btn" onClick={handleBack} />
+      {/* <img src={back_btn} className="back_btn" onClick={handleBack} /> */}
     </>
   )
 }
