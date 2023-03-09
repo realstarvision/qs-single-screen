@@ -50,14 +50,9 @@ export default function index() {
     region: false,
   })
   // 易涝区中tab选中状态
-  let [waterloggingActive, setWaterloggingActive] = useState(2)
+  let [waterloggingActive, setWaterloggingActive] = useState(-1)
   // 是否进入乔司区域
   let [enterQS, setEnterQS] = useState(false)
-
-  /* 详情里项的点击事件 */
-  const handleItemClick = coordinates => {
-    // SetCoordinates(coordinates)
-  }
 
   /* 查看易涝详情 */
   const handleCheckDetails = type => {
@@ -232,7 +227,7 @@ export default function index() {
                   waterloggingId={checkedPoint.id}
                   active={waterloggingActive}
                   setActive={setWaterloggingActive}
-                  onItemClick={handleItemClick}
+                  onItemClick={handleDetailsListItemClick}
                 ></Waterlogging>
               )}
             </>

@@ -64,7 +64,7 @@ export function circularRingOption() {
       itemHeight: 5,
       textStyle: {
         color: "#C3C7C7",
-        fontSize: '0.6rem',
+        fontSize: '0.7rem',
       },
       icon: "circle"
     },
@@ -112,11 +112,11 @@ export function surfaceCircularRingOption() {
       top: 'center',
       textStyle: {
         color: '#4987FF',
-        fontSize: '0.8rem',
+        fontSize: '1.2rem',
       },
       subtextStyle: {
         color: '#ffffff',
-        fontSize: '0.5rem',
+        fontSize: '0.8rem',
       },
       textVerticalAlign: 'middle',
 
@@ -140,7 +140,7 @@ export function surfaceCircularRingOption() {
     legend: {
       type: "scroll",
       right: "3%",
-      top: -8,
+      top: -5,
       data: ['建筑', '道路', '林地', '草地', '裸地', '耕地', '水体'],
       itemGap: 5,
       formatter: function (name) {
@@ -150,7 +150,7 @@ export function surfaceCircularRingOption() {
       itemHeight: 5,
       textStyle: {
         color: "#C3C7C7",
-        fontSize: '0.6rem',
+        fontSize: '0.7rem',
       },
       icon: "circle"
     },

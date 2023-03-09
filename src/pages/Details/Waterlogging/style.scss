@@ -1,69 +1,71 @@
 
 .rightBox_waterlogging{
-    .title_model{
-      font-size: 16px;
-      font-weight: bold;
-      line-height: 20px;
-      color: #FFFFFF;
-    }
+  .closeX-box{
+    text-align: right;
   }
-
-  // 易涝区域
-  .content_area{
-    img{
-      margin-top: 10px !important;
-    }
-    .mt-30{
-      margin-top: 30px;
-    }
+  .title_model{
+    font-size: 16px;
+    font-weight: bold;
+    line-height: 20px;
+    color: #FFFFFF;
   }
+}
 
-  // DOM模型
-  .content_model{
-    .soilWaterContentEchart_box{
-      height: 300px;
-      margin-top: 50px;
-    }
-    .echart_tab_box{
-      padding: 0 50px ;
-      display: flex;
-      justify-content: space-between;
-      .echart_tab{
-        cursor: pointer;
-        text-align: center;
-        &:hover{
-          opacity: 0.6;
-        }
-        .icon{
-          width: 24px;
-          height: 24px;
-        }
-        p{
-          margin-top: 10px;
-          font-size: 14px;
-          color: #2D7FE0;
-        }
-      }
-    }
+// 易涝区域
+.content_area{
+  img{
+    margin-top: 10px !important;
+  }
+  .mt-30{
+    margin-top: 30px;
+  }
+}
 
-    .soilWaterContentDetails_box{
-      margin-top: 30px;
-      .title{
-        font-size: 16px;
-        font-weight: bold;
+// DOM模型
+.content_model{
+  .soilWaterContentEchart_box{
+    height: 300px;
+    margin-top: 30px;
+  }
+  .echart_tab_box{
+    padding: 0 20px ;
+    display: flex;
+    justify-content: space-between;
+    .echart_tab{
+      cursor: pointer;
+      text-align: center;
+      &:hover{
+        opacity: 0.6;
       }
-      .details{
-        margin-top: 20px;
+      .icon{
+        width: 24px;
+        height: 24px;
+      }
+      p{
+        margin-top: 10px;
         font-size: 14px;
-        line-height: 22px;
-        font-weight: 400;
-        span{
-          text-indent: 2em;
-          display: inline-block
-        }
+        color: #2D7FE0;
       }
     }
   }
+}
+.soilWaterContentDetails_box{
+  margin-top: 30px;
+  .title{
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .details{
+    margin-top: 20px;
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: 400;
+    span{
+      text-indent: 2em;
+      display: inline-block
+    }
+  }
+}
 .leftBox_waterlogging{
 }
 

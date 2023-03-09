@@ -56,7 +56,7 @@ function index({ active, waterloggingId, onItemClick, setActive }, ref) {
       data[item] = itemData[item]
     })
     setData({ ...data })
-    setActive(2)
+    setActive(-1)
     setVisible(true)
   }, [waterloggingId])
 
@@ -66,12 +66,8 @@ function index({ active, waterloggingId, onItemClick, setActive }, ref) {
     //   ele.icon = ele.defaultIcon
     // })
     // item.icon = item.activeIcon
-    Object.keys(data).forEach(item => {
-      data[item] = itemData[item]
-    })
-    setData({ ...data })
-    onItemClick(itemData.coordinates)
-    setActive(2)
+    onItemClick(itemData)
+    setActive(-1)
     setVisible(true)
   }
 
@@ -195,6 +191,7 @@ function index({ active, waterloggingId, onItemClick, setActive }, ref) {
                 ></SvgIcon>
               </div>
             )}
+            {/* 点位的详情 */}
             <Box className="title_bar">
               {active === -1 && (
                 <div className="title_info">
@@ -210,16 +207,8 @@ function index({ active, waterloggingId, onItemClick, setActive }, ref) {
               )}
               {active === 1 && <span className="title_model">地物分类</span>}
               {active === 3 && <span className="title_model">土壤湿度</span>}
-
-              <SvgIcon
-                svgName="closeX"
-                svgClass="closeX"
-                onClick={() => {
-                  setVisible(false)
-                }}
-              ></SvgIcon>
             </Box>
-            {active === 2 && (
+            {active === -1 && (
               <Box className="content_area ">
                 <p
                   className="mt font mt-30"
@@ -227,14 +216,9 @@ function index({ active, waterloggingId, onItemClick, setActive }, ref) {
                     display: 'flex',
                   }}
                 >
-                  <span>经纬度：</span>
-                  <div>
-                    {data.coordinates.length > 0 ? data.coordinates[0] : ''}
-                    <br />
-                    {data.coordinates.length > 0 ? data.coordinates[1] : ''}
-                  </div>
+                  <span>位置：</span>
+                  <div>{data.position}</div>
                 </p>
-                <p className="mt font">详细地址：{data.position}</p>
                 <p className="mt font">易涝面积：{data.acreage}</p>
                 <p className="mt font">地理显示</p>
                 <img
@@ -245,6 +229,7 @@ function index({ active, waterloggingId, onItemClick, setActive }, ref) {
                 ></img>
               </Box>
             )}
+            {/* 图表 */}
             {(active === 1 || active === 3) && (
               <Box className="content_model">
                 <div className="soilWaterContentEchart_box">
@@ -257,14 +242,21 @@ function index({ active, waterloggingId, onItemClick, setActive }, ref) {
                 {active === 1 && (
                   <div className="echart_tab_box">
                     {echartTabs.map((item, index) => (
-                      <div className="echart_tab" onClick={() => handleEchartTabClick(index)}>
+                      <div className="echart_tab" onClick={() => handleEchartTabClick(item)}>
                         <SvgIcon
                           svgClass="icon"
-                          svgName={terrainClassificationActive === index ? item.activeIcon : item.icon}
+                          svgName={
+                            terrainClassificationActive && terrainClassificationActive.id === item.id
+                              ? item.activeIcon
+                              : item.icon
+                          }
                         ></SvgIcon>
                         <p
                           style={{
-                            color: terrainClassificationActive === index ? '#77B5FF' : '#2D7FE0',
+                            color:
+                              terrainClassificationActive && terrainClassificationActive.id === item.id
+                                ? '#77B5FF'
+                                : '#2D7FE0',
                           }}
                         >
                           {item.label}
@@ -273,29 +265,26 @@ function index({ active, waterloggingId, onItemClick, setActive }, ref) {
                     ))}
                   </div>
                 )}
-                <div className="soilWaterContentDetails_box">
-                  <p className="title">{active === 1 ? '地物分类信息' : '土壤湿度信息'}</p>
-                  <p className="details">
-                    {active === 1
-                      ? detailsInfo[0].map(item => {
-                          return (
-                            <span>
-                              {item}
-                              <br />
-                            </span>
-                          )
-                        })
-                      : detailsInfo[1].map(item => {
-                          return (
-                            <span>
-                              {item} <br />
-                            </span>
-                          )
-                        })}
-                    {/* {echartTabs[terrainClassificationActive].waterContentData.description} */}
-                  </p>
-                </div>
               </Box>
+            )}
+            {/* 详情描述 */}
+            {active !== -1 && (
+              <div className="soilWaterContentDetails_box">
+                <p className="title">
+                  {waterloggingTabs.find(item => {
+                    return item.id === active
+                  }).title + '信息'}
+                </p>
+                <p className="details">
+                  <span>
+                    {
+                      waterloggingTabs.find(item => {
+                        return item.id === active
+                      }).details
+                    }
+                  </span>
+                </p>
+              </div>
             )}
           </Box>
         </Box>
