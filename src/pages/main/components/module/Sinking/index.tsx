@@ -3,6 +3,7 @@ import { Box, Grid } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
 import { setWms } from '@/store/module/wms'
 import { setDangerLevel } from '@/store/module/dangerLevel'
+import { setKeyAreasActive } from '@/store/module/keyAreasActive'
 // 组件
 import Echarts from '@/components/Echarts'
 import Table from '@/components/Table'
@@ -11,16 +12,14 @@ import Title from '../../Title'
 import HexagonModule from '../../HexagonModule'
 import KeyAreasTabs from '../../KeyAreasTabs'
 import EventCount from '../../EventCount'
+import AnnouncementDialog from '@/pages/AnnouncementDialog'
 // 数据样式
 import { linearGradientOption, circularRingOption, doubleBarOption } from '../../echartOption'
 import {
-  menuList,
+  wmsList,
   list,
   line,
   xAxisData,
-  list1,
-  line1,
-  xAxisData1,
   dangerList,
   dangerLine,
   xAxisDataDanger,
@@ -30,7 +29,7 @@ import {
   eventProcessingListData,
   dangerLevelHexagonList,
 } from './json'
-import AnnouncementDialog from '@/pages/AnnouncementDialog'
+import chartsAnimation from '@/utils/chartsAnimation'
 import './style.scss'
 import '@/pages/main/components/FloatFrame/style.scss'
 
@@ -50,21 +49,17 @@ let doughnutChartData = [
 ]
 
 export default function index() {
-  let [mapTabActive, setMapTabActive] = useState(0)
+  const dispatch = useDispatch()
+  let dangerLevel = useSelector((state: { dangerLevel }) => state.dangerLevel.value)
+  let keyAreasActive = useSelector((state: { keyAreasActive }) => state.keyAreasActive.value)
+  // let [keyAreasActive, setMapTabActive] = useState(0)
   // redux获取未读消息数据
-  let [open, setOpen] = useState({
-    danger: false,
-    steady: false,
-    fluctuate: false,
-  })
+  let [open, setOpen] = useState({ ...dangerLevel })
   const subsidenceAreaEchartRef = useRef(null)
   const historyDataEchartRef = useRef(null)
   const dangerLevelEchartRef = useRef(null)
   const announcementDialogRef = useRef(null)
   const eventProcessingSafetyRef = useRef(null)
-  // let open = useSelector((state: { dangerLevel }) => state.dangerLevel.value)
-  // 设置redux值
-  const dispatch = useDispatch()
 
   // 沉降面积数据
   let [subsidenceArea, setSubsidenceArea] = useState([
@@ -76,7 +71,7 @@ export default function index() {
   useEffect(() => {
     if (historyDataEchartRef.current) {
       setTimeout(() => {
-        historyDataTimer = chartEvent(historyDataEchartRef.current, historyDataTimer)
+        historyDataTimer = chartsAnimation(historyDataEchartRef.current, historyDataTimer, xAxisData.length - 1, 2, 0)
       }, 0)
     }
   }, [historyDataEchartRef.current])
@@ -84,7 +79,13 @@ export default function index() {
   useEffect(() => {
     if (dangerLevelEchartRef.current) {
       setTimeout(() => {
-        areaChangeTimer = chartEvent(dangerLevelEchartRef.current, areaChangeTimer)
+        areaChangeTimer = chartsAnimation(
+          dangerLevelEchartRef.current,
+          areaChangeTimer,
+          xAxisDataDanger.length - 1,
+          2,
+          0
+        )
       }, 0)
     }
   }, [dangerLevelEchartRef.current])
@@ -92,7 +93,7 @@ export default function index() {
   useEffect(() => {
     if (eventProcessingSafetyRef.current) {
       setTimeout(() => {
-        interValSafetyTimer = chartEvent(eventProcessingSafetyRef.current, interValSafetyTimer)
+        interValSafetyTimer = chartsAnimation(eventProcessingSafetyRef.current, interValSafetyTimer, 11)
       }, 0)
     }
   }, [eventProcessingSafetyRef.current])
@@ -100,7 +101,7 @@ export default function index() {
   // 初始化
   useEffect(() => {
     setTimeout(() => {
-      dispatch(setWms(menuList[0]))
+      dispatch(setWms(wmsList[0]))
       /* 监听legend改变来计算面积 */
       subsidenceAreaEchartRef.current.myChart.on('legendselectchanged', function (obj) {
         let count = 0
@@ -135,15 +136,13 @@ export default function index() {
 
   useEffect(() => {
     /* 重置危险等级 */
-    // if (mapTabActive !== 0) {
     Object.keys(open).forEach(item => {
       open[item] = false
     })
     setOpen({ ...open })
     dispatch(setDangerLevel({ ...open }))
-    // }
     // 改变图表数据
-    if (mapTabActive === 0) {
+    if (keyAreasActive === 0) {
       setSubsidenceArea([
         { value: 5, name: '上升' },
         { value: 5, name: '下降' },
@@ -151,7 +150,7 @@ export default function index() {
       dangerLevelHexagonList.forEach(item => {
         item.value = '5.00'
       })
-    } else if (mapTabActive === 1) {
+    } else if (keyAreasActive === 1) {
       setSubsidenceArea([
         { value: 1, name: '上升' },
         { value: 3, name: '下降' },
@@ -159,7 +158,7 @@ export default function index() {
       dangerLevelHexagonList.forEach(item => {
         item.value = '4.00'
       })
-    } else if (mapTabActive === 2) {
+    } else if (keyAreasActive === 2) {
       setSubsidenceArea([
         { value: 8, name: '上升' },
         { value: 6, name: '下降' },
@@ -167,7 +166,7 @@ export default function index() {
       dangerLevelHexagonList.forEach(item => {
         item.value = '3.00'
       })
-    } else if (mapTabActive === 3) {
+    } else if (keyAreasActive === 3) {
       setSubsidenceArea([
         { value: 7, name: '上升' },
         { value: 2, name: '下降' },
@@ -177,19 +176,23 @@ export default function index() {
       })
     }
 
+    // 设置wms图
+    dispatch(setWms(wmsList[keyAreasActive]))
+
     // 图表变化
     // chartsChange()
-  }, [mapTabActive])
+  }, [keyAreasActive])
 
   /* 地图标签切换事件 */
-  const handleMapTabClick = index => {}
+  const handleMapTabClick = index => {
+    dispatch(setKeyAreasActive(index))
+  }
 
-  const handleOpen = type => {
-    if (mapTabActive === 0) {
-      open[type] = !open[type]
-      dispatch(setDangerLevel({ ...open }))
-      setOpen({ ...open })
-    }
+  /* 六边形单击事件 */
+  const handleOpen = (item, type) => {
+    open[type] = !open[type]
+    dispatch(setDangerLevel({ ...open }))
+    setOpen({ ...open })
     // 没有选中的情况
     let isAll = Object.keys(open).findIndex(item => {
       if (open[item]) {
@@ -214,34 +217,6 @@ export default function index() {
     announcementDialogRef.current.handleSetData(row)
   }
 
-  // 定时器滚动事件
-  function chartEvent(ref, timerName, length = 6, endValue = 2, startValue = 0, timeout = 3500) {
-    // 定时器
-    if (timerName) {
-      clearInterval(timerName)
-    }
-    let timer = setInterval(function () {
-      // 每次向后滚动一个，最后一个从头开始。
-      let option = ref.myChart.getModel().option
-      let obj
-      if (option.dataZoom[0].endValue == length) {
-        obj = {
-          startValue: startValue,
-          endValue: endValue,
-        }
-      } else {
-        obj = {
-          startValue: option.dataZoom[0].startValue + 1,
-          endValue: option.dataZoom[0].endValue + 1,
-        }
-      }
-      ref.setOption({
-        dataZoom: [obj],
-      })
-    }, timeout)
-    return timer
-  }
-
   /* 图表鼠标移入移出事件 */
   const handleChartMouse = (action, type) => {
     if (action === 'enter') {
@@ -263,11 +238,17 @@ export default function index() {
       }
     } else if (action === 'leave') {
       if (type === 'history') {
-        historyDataTimer = chartEvent(historyDataEchartRef.current, historyDataTimer)
+        historyDataTimer = chartsAnimation(historyDataEchartRef.current, historyDataTimer, xAxisData.length - 1, 2, 0)
       } else if (type === 'area') {
-        areaChangeTimer = chartEvent(dangerLevelEchartRef.current, areaChangeTimer)
+        areaChangeTimer = chartsAnimation(
+          dangerLevelEchartRef.current,
+          areaChangeTimer,
+          xAxisDataDanger.length - 1,
+          2,
+          0
+        )
       } else if (type === 'event') {
-        interValSafetyTimer = chartEvent(eventProcessingSafetyRef.current, interValSafetyTimer)
+        interValSafetyTimer = chartsAnimation(eventProcessingSafetyRef.current, interValSafetyTimer, 11)
       }
     }
   }
@@ -276,13 +257,13 @@ export default function index() {
     <>
       {/* 左 */}
       <FloatFrame className="left">
-        <Box className="sinking_left">
+        <Box className="sinking_left side-wrapper">
           <Grid spacing={{ xs: 2 }} container className="subsidence_risk_prediction">
             <Grid xs={6} className="subsidence_area">
               {/* <img src={subsidence_area_tab} /> */}
               <Title
                 title="沉降面积"
-                size="normal"
+                size="small"
                 style={{
                   marginBottom: '5px',
                 }}
@@ -303,6 +284,7 @@ export default function index() {
                   line,
                   xAxisData,
                   grid: { left: 35, top: '22%', bottom: 20, right: '3%' },
+                  unit: 'km²',
                 })}
               ></Echarts>
               {/* <p className="unit">单位：km²</p> */}
@@ -310,9 +292,15 @@ export default function index() {
           </Grid>
           {/* 沉降面积和危险等级 */}
           <Grid container className="middle">
-            <Grid xs={6}>
+            <Grid xs={6} className="left">
               <Title title="危险等级" size="small" />
-              <HexagonModule list={dangerLevelHexagonList} onOpen={handleOpen} open={open}></HexagonModule>
+              <HexagonModule
+                list={dangerLevelHexagonList}
+                onOpen={handleOpen}
+                open={open}
+                className="hexagonModule"
+              ></HexagonModule>
+              <DangerLevelLegend></DangerLevelLegend>
             </Grid>
             <Grid xs={6} className="threat_level">
               <Title title="面积变化" size="small" />
@@ -330,17 +318,17 @@ export default function index() {
                   unit: 'km²',
                 })}
               ></Echarts>
-              <p className="unit">单位：km²</p>
+              {/* <p className="unit">单位：km²</p> */}
             </Grid>
           </Grid>
           {/* 累计沉降量 */}
-          <KeyAreasTabs active={mapTabActive} onClick={handleMapTabClick}></KeyAreasTabs>
+          <KeyAreasTabs active={keyAreasActive} onClick={handleMapTabClick}></KeyAreasTabs>
         </Box>
       </FloatFrame>
 
       {/* 右 */}
       <FloatFrame className="right">
-        <Box className="sinking_right">
+        <Box className="sinking_right side-wrapper">
           {/* 公告消息 */}
           <Box className="table_box">
             <Title
@@ -391,5 +379,40 @@ export default function index() {
         </Box>
       </FloatFrame>
     </>
+  )
+}
+
+function DangerLevelLegend() {
+  let legendList = [
+    {
+      color: '#0EA507',
+      label: '5mm以下',
+    },
+    {
+      color: '#946E22',
+      label: '5mm～20mm',
+    },
+    {
+      color: '#A02626',
+      label: '20mm以上',
+    },
+  ]
+
+  return (
+    <Box className="legend">
+      {legendList.map(item => {
+        return (
+          <span
+            style={
+              {
+                '--bgColor': item.color,
+              } as any
+            }
+          >
+            {item.label}
+          </span>
+        )
+      })}
+    </Box>
   )
 }

@@ -11,7 +11,9 @@ export function linearGradientOption({
   },
   lineStyle = ['#0170D2', '#FFD141', '#00E6F9', '#F9965E'],
   color = ['1, 112, 210', '255, 209, 65', '0, 230, 249', '249, 150, 94'],
-  unit = ''
+  unit = '',
+  endValue = 2,
+  startValue = 0
 }) {
 
   // 折线图块的内容
@@ -79,8 +81,8 @@ export function linearGradientOption({
         show: false,
         xAxisIndex: [0],
         left: '93%',
-        startValue: 0, // 从头开始。
-        endValue: 2, // 一次性展示4个。
+        startValue: startValue, // 从头开始。
+        endValue: endValue, // 一次性展示4个。
         handleSize: 0,
         filterMode: 'empty',
         handleStyle: {
@@ -91,8 +93,8 @@ export function linearGradientOption({
       {
         type: 'inside',
         xAxisIndex: [0],
-        startValue: 0, // 从头开始。
-        endValue: 2, // 一次性展示4个。
+        startValue: startValue, // 从头开始。
+        endValue: endValue, // 一次性展示4个。
         zoomOnMouseWheel: false,  // 关闭滚轮缩放
         moveOnMouseWheel: true, // 开启滚轮平移
         moveOnMouseMove: true  // 鼠标移动能触发数据窗口平移 
@@ -223,6 +225,40 @@ export function doubleLinearOption({ unit = "" }) {
   let color = ['1, 112, 210', '255, 209, 65', '0, 230, 249', '249, 150, 94']
   let lineStyle = ['#0170D2', '#FFD141', '#00E6F9', '#F9965E']
 
+
+  // x轴
+  let xAxisData1 = ['9/01', '9/02', '9/03', '9/04', '9/05', '9/06', '9/07      ']
+  let xAxisData2 = ['9/01', '9/02', '9/03', '9/04', '9/05', '9/06', '9/07      ']
+  // 数据
+  let list = [
+    {
+      name: '生活垃圾',
+      data: [10, 20, 30, 40, 30, 20, 35],
+    },
+    {
+      name: '厨余垃圾',
+      data: [11, 16, 28, 35, 22, 9, 26],
+    },
+    {
+      name: '可回收垃圾',
+      data: [33, 14, 16, 25, 27, 19, 34],
+    }
+  ]
+  let list1 = [
+    {
+      name: '生活垃圾',
+      data: [55, 2, 30, 40, 60, 20],
+    },
+    {
+      name: '厨余垃圾',
+      data: [13, 19, 23, 30, 18, 80],
+    },
+    {
+      name: '可回收垃圾',
+      data: [11, 56, 74, 36, 55, 15],
+    }
+  ]
+
   // 折线图块的内容
   function Item(name, data, lineStyle, color, axisIndex) {
     return {
@@ -261,51 +297,65 @@ export function doubleLinearOption({ unit = "" }) {
     title: [
       {
         text: '日处理趋势',
-        left: '75%',
+        left: '70%',
         top: '90%',
         textStyle: {
           color: '#ddd',
-          fontSize: '0.8rem',
+          fontSize: '0.65rem',
         },
       }, {
         text: '周处理趋势',
-        left: '25%',
+        left: '20%',
         top: '90%',
         textStyle: {
           color: '#ddd',
-          fontSize: '0.8rem',
+          fontSize: '0.65rem',
         },
       },
     ],
     dataZoom: [
       {
         type: 'slider',
-        realtime: true,
-        start: 0,
-        end: 100,  // 数据窗口范围的结束百分比。范围是：0 ~ 100。
-        height: 7, //组件高度
-        left: 5, //左边的距离
-        right: 5, //右边的距离
-        bottom: 0, //下边的距离
-        show: false,  // 是否展示
-        fillerColor: "rgba(17, 100, 210, 0.42)", // 滚动条颜色
-        borderColor: "rgba(17, 100, 210, 0.12)",
-        handleSize: 0,      //两边手柄尺寸
-        showDetail: false, //拖拽时是否展示滚动条两侧的文字
-        zoomLock: true,         //是否只平移不缩放
-        moveOnMouseMove: false, //鼠标移动能触发数据窗口平移
-        //zoomOnMouseWheel: false, //鼠标移动能触发数据窗口缩放
-
-        //下面是自己发现的一个问题，当点击滚动条横向拖拽拉长滚动条时，会出现文字重叠，导致效果很不好，以此用下面四个属性进行设置，当拖拽时，始终保持显示六个柱状图，可结合自己情况进行设置。添加这个属性前后的对比见**图二**
-        startValue: 0, // 从头开始。
-        endValue: 6,  // 最多六个
-        minValueSpan: 6,  // 放大到最少几个
-        maxValueSpan: 6,  //  缩小到最多几个
+        show: false,
+        xAxisIndex: [0],
+        left: '93%',
+        startValue: 3, // 从头开始。
+        endValue: 0, // 一次性展示4个。
+        handleSize: 0,
+        filterMode: 'empty',
+        handleStyle: {
+          borderCap: 'round',
+          borderWidth: 0
+        }
       },
       {
-        type: "inside",  // 支持内部鼠标滚动平移
-        start: 0,
-        end: 100,
+        type: 'inside',
+        xAxisIndex: [0],
+        startValue: 3, // 从头开始。
+        endValue: 0, // 一次性展示4个。
+        zoomOnMouseWheel: false,  // 关闭滚轮缩放
+        moveOnMouseWheel: true, // 开启滚轮平移
+        moveOnMouseMove: true  // 鼠标移动能触发数据窗口平移 
+      },
+      {
+        type: 'slider',
+        show: false,
+        xAxisIndex: [1],
+        left: '93%',
+        startValue: 3, // 从头开始。
+        endValue: 0, // 一次性展示4个。
+        handleSize: 0,
+        filterMode: 'empty',
+        handleStyle: {
+          borderCap: 'round',
+          borderWidth: 0
+        }
+      },
+      {
+        type: 'inside',
+        xAxisIndex: [1],
+        startValue: 3, // 从头开始。
+        endValue: 0, // 一次性展示4个。
         zoomOnMouseWheel: false,  // 关闭滚轮缩放
         moveOnMouseWheel: true, // 开启滚轮平移
         moveOnMouseMove: true  // 鼠标移动能触发数据窗口平移 
@@ -315,14 +365,14 @@ export function doubleLinearOption({ unit = "" }) {
       {
         type: "scroll",
         right: "2%",
-        top: 10,
+        top: '1%',
         data: ['生活垃圾', '厨余垃圾', '可回收垃圾'],
         itemGap: 10,
         itemWidth: 6,
         itemHeight: 6,
         textStyle: {
           color: "#C3C7C7",
-          fontSize: '0.75rem',
+          fontSize: '0.6rem',
         },
         icon: "circle"
       }
@@ -356,14 +406,14 @@ export function doubleLinearOption({ unit = "" }) {
     grid: [{
       show: false,
       left: "2%",
-      top: "15%",
+      top: "20%",
       containLabel: true,
       width: "45%",
       height: '70%',
     }, {
       show: false,
       left: "55%",
-      top: "15%",
+      top: "20%",
       containLabel: true,
       width: "44%",
       height: '70%',
@@ -371,7 +421,7 @@ export function doubleLinearOption({ unit = "" }) {
     xAxis: [{
       gridIndex: 0,
       type: 'category',
-      data: ['9/01', '9/02', '9/03', '9/04', '9/05', '9/06', '9/07      '],
+      data: xAxisData1,
       boundaryGap: false,
       axisTick: {
         show: false,
@@ -379,13 +429,13 @@ export function doubleLinearOption({ unit = "" }) {
       axisLabel: {
         textStyle: {
           color: "#fff", // x轴颜色
-          fontSize: '0.75rem',
+          fontSize: '0.6rem',
         },
       },
     }, {
       gridIndex: 1,
       type: 'category',
-      data: ['2019', '2020', '2021', '2022      '],
+      data: xAxisData2,
       boundaryGap: false,
       axisTick: {
         show: false,
@@ -393,7 +443,7 @@ export function doubleLinearOption({ unit = "" }) {
       axisLabel: {
         textStyle: {
           color: "#fff", // x轴颜色
-          fontSize: '0.75rem',
+          fontSize: '0.6rem',
         },
       },
     }],
@@ -417,7 +467,7 @@ export function doubleLinearOption({ unit = "" }) {
         },
         axisLabel: {
           color: '#fff',
-          fontSize: '0.8rem',
+          fontSize: '0.6rem',
         }
       }, {
         gridIndex: 1,
@@ -438,42 +488,13 @@ export function doubleLinearOption({ unit = "" }) {
         },
         axisLabel: {
           color: '#fff',
-          fontSize: '0.8rem',
+          fontSize: '0.6rem',
         }
       }
     ],
     series: []
   }
 
-  let list = [
-    {
-      name: '生活垃圾',
-      data: [10, 20, 30, 40, 30, 20, 35],
-    },
-    {
-      name: '厨余垃圾',
-      data: [11, 16, 28, 35, 22, 9, 26],
-    },
-    {
-      name: '可回收垃圾',
-      data: [33, 14, 16, 25, 27, 19, 34],
-    }
-  ]
-
-  let list1 = [
-    {
-      name: '生活垃圾',
-      data: [55, 2, 30, 40, 60, 20],
-    },
-    {
-      name: '厨余垃圾',
-      data: [13, 19, 23, 30, 18, 80],
-    },
-    {
-      name: '可回收垃圾',
-      data: [11, 56, 74, 36, 55, 15],
-    }
-  ]
   // 添加内容
   list.forEach((item, index) => {
     option.series.push(Item(item.name, item.data, lineStyle[index], color[index], 0))
@@ -596,7 +617,7 @@ export function circularRingWaterloggingOption(title) {
       },
       subtextStyle: {
         color: '#ffffff',
-        fontSize: '0.8rem',
+        fontSize: '0.75rem',
       },
       textVerticalAlign: 'middle',
       itemGap: 1
@@ -628,7 +649,7 @@ export function circularRingWaterloggingOption(title) {
       itemHeight: 6,
       textStyle: {
         color: "#C3C7C7",
-        fontSize: '0.75rem',
+        fontSize: '0.6rem',
       },
       icon: "circle",
       // 禁止点击
@@ -637,7 +658,7 @@ export function circularRingWaterloggingOption(title) {
     series: [
       {
         type: 'pie',
-        radius: ['38%', '48%'],
+        radius: ['40%', '52%'],
         avoidLabelOverlap: false,
         label: {
           show: false,
@@ -840,7 +861,7 @@ export function doubleBarOption() {
               color: '#a8aab0',
               fontStyle: 'normal',
               fontFamily: '微软雅黑',
-              fontSize: '0.75rem',
+              fontSize: '0.7rem',
             },
           },
         },
@@ -876,7 +897,7 @@ export function doubleBarOption() {
               color: '#a8aab0',
               fontStyle: 'normal',
               fontFamily: '微软雅黑',
-              fontSize: '0.75rem',
+              fontSize: '0.7rem',
             },
           },
         },
@@ -907,33 +928,42 @@ export function doubleBarOption() {
 export function triangleOption(xLabel, data, title = '分区区域内涝水体面积（km²）') {
 
   return {
-    // backgroundColor: "#011a33",
-    // title: {
-    //   text: '分区区域内涝水体面积（km²）',
-    //   // subtext: subtext,
-    //   left: 'center',
-    //   top: '20',
-    //   textStyle: {
-    //     color: '#4987FF',
-    //     fontSize: '1.5rem',
-    //   },
-    //   subtextStyle: {
-    //     color: '#ffffff',
-    //     fontSize: '1rem',
-    //   },
-    //   textVerticalAlign: 'middle',
-    //   itemGap: 1
-    // },
+    dataZoom: [
+      {
+        type: 'slider',
+        show: false,
+        xAxisIndex: [0],
+        left: '93%',
+        startValue: 0, // 从头开始。
+        endValue: 4, // 一次性展示6个。
+        handleSize: 0,
+        filterMode: 'empty',
+        handleStyle: {
+          borderCap: 'round',
+          borderWidth: 0
+        }
+      },
+      {
+        type: 'inside',
+        xAxisIndex: [0],
+        startValue: 0, // 从头开始。
+        endValue: 4, // 一次性展示6个。
+        zoomOnMouseWheel: false,  // 关闭滚轮缩放
+        moveOnMouseWheel: true, // 开启滚轮平移
+        moveOnMouseMove: true  // 鼠标移动能触发数据窗口平移 
+      }
+    ],
     legend: {
       data: [title],
-      top: "8%",
+      top: "5%",
+      left: 'center',
       textStyle: {
         color: "#eeeeee",
-        fontSize: '0.8rem',
+        fontSize: '0.75rem',
       },
       icon: 'rect',
-      itemWidth: 20,
-      // itemHeight: 14,
+      itemWidth: 15,
+      itemHeight: 10,
       formatter: function (name) {
         return '  ' + name
       },
@@ -951,7 +981,7 @@ export function triangleOption(xLabel, data, title = '分区区域内涝水体�
       borderWidth: 0,
       textStyle: {
         color: '#fff',
-        fontSize: 16
+        fontSize: 14
       },
       formatter: function (params) {
         let param = params[0]
@@ -981,7 +1011,7 @@ export function triangleOption(xLabel, data, title = '分区区域内涝水体�
           color: "#fff",
           interval: 0, //横轴信息全部显示
           textStyle: {
-            fontSize: '0.75rem',
+            fontSize: '0.7rem',
           },
         },
         axisTick: {
@@ -995,7 +1025,7 @@ export function triangleOption(xLabel, data, title = '分区区域内涝水体�
           formatter: "{value}",
           color: "#fff",
           textStyle: {
-            fontSize: '0.75rem',
+            fontSize: '0.7rem',
           },
         },
         axisLine: {
@@ -1049,7 +1079,7 @@ export function triangleOption(xLabel, data, title = '分区区域内涝水体�
               position: 'top',
               textStyle: {
                 color: '#fff',
-                fontSize: '0.75rem',
+                fontSize: '0.7rem',
               }
             }
           },
@@ -1117,17 +1147,20 @@ export function lineOrdinary({ line, xAxisData, list, grid = {
         show: false,
         xAxisIndex: [0],
         left: '93%',
-        // start: 100, //数据窗口范围的起始百分比
-        // end: 64,
-        startValue: 0, // 从头开始。
-        endValue: 4, // 一次性展示4个。
+        startValue: 4, // 从头开始。
+        endValue: 0, // 一次性展示4个。
         handleSize: 0,
+        filterMode: 'empty',
+        handleStyle: {
+          borderCap: 'round',
+          borderWidth: 0
+        }
       },
       {
         type: 'inside',
         xAxisIndex: [0],
-        start: 100,
-        end: 64,
+        startValue: 4, // 从头开始。
+        endValue: 0, // 一次性展示4个。
         zoomOnMouseWheel: false,  // 关闭滚轮缩放
         moveOnMouseWheel: true, // 开启滚轮平移
         moveOnMouseMove: true  // 鼠标移动能触发数据窗口平移 
@@ -1173,7 +1206,7 @@ export function lineOrdinary({ line, xAxisData, list, grid = {
       itemHeight: 6,
       textStyle: {
         color: "#C3C7C7",
-        fontSize: '0.75rem',
+        fontSize: '0.65rem',
       },
       icon: "circle",
       // 禁止点击
@@ -1190,7 +1223,7 @@ export function lineOrdinary({ line, xAxisData, list, grid = {
       axisLabel: {
         textStyle: {
           color: "#fff", // x轴颜色
-          fontSize: '0.75rem',
+          fontSize: '0.65rem',
         },
       },
     },
@@ -1213,7 +1246,7 @@ export function lineOrdinary({ line, xAxisData, list, grid = {
       },
       axisLabel: {
         color: '#fff',
-        fontSize: '0.8rem',
+        fontSize: '0.65rem',
       }
     },
     series: []

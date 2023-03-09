@@ -14,13 +14,23 @@ interface List {
 
 let colorList = ['#CDA103', '#0BCD03', '#C60406']
 
-export default function index({ list, onOpen, open }: { list: Array<List>; onOpen?: Function; open?: any }) {
+export default function index({
+  list,
+  onOpen,
+  open,
+  className,
+}: {
+  list: Array<List>
+  onOpen?: Function
+  open?: any
+  className?: string
+}) {
   const handleOpen = (item, type) => {
     onOpen(item, type)
   }
 
   return (
-    <Box className={s.container}>
+    <Box className={s.container + ' ' + className}>
       <img src={danger_level_bg} className={s.danger_level_img_bg} />
       {list.map((item, index) => (
         <Hexagon

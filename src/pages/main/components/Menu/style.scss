@@ -1,0 +1,42 @@
+/* 菜单 */
+.menu-container{
+  cursor: pointer;
+  position: absolute;
+  width: 100%;
+  max-width:570px ;
+  min-width: 300px;
+  left: 50%;
+  bottom: 60px;
+  transform: translateX(-50%);
+  z-index: 999;
+  display:  flex;
+  justify-content: space-around;
+  // height: 175px;
+  .menuItem{
+    width: 29%;
+    img{
+      width:  100%;
+      transition: all 0.3s;
+      &:hover{
+        transform: scale(1.05);
+      }
+    }
+    .menu_animation{
+      animation: menu-animation 0.4s ease-in;
+    }
+  }
+}
+
+@keyframes menu-animation {
+  0%{
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50%{
+    transform: scale(1.1);
+  }
+  100%{
+    opacity: 1;
+    transform: scale(1);
+  }
+}

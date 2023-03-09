@@ -24,12 +24,12 @@ export function circularRingOption() {
       top: '30%',
       textStyle: {
         color: '#4987FF',
-        fontSize: '0.8rem',
+        fontSize: '1.2rem',
 
       },
       subtextStyle: {
         color: '#ffffff',
-        fontSize: '0.5rem',
+        fontSize: '0.8rem',
       },
       // textVerticalAlign: 'middle',
 
@@ -64,7 +64,7 @@ export function circularRingOption() {
       itemHeight: 5,
       textStyle: {
         color: "#C3C7C7",
-        fontSize: '0.5rem',
+        fontSize: '0.6rem',
       },
       icon: "circle"
     },
@@ -150,7 +150,7 @@ export function surfaceCircularRingOption() {
       itemHeight: 5,
       textStyle: {
         color: "#C3C7C7",
-        fontSize: '0.5rem',
+        fontSize: '0.6rem',
       },
       icon: "circle"
     },

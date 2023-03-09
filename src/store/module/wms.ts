@@ -4,7 +4,10 @@ const initialState = {
   value: {
     work_spaces: '',
     layers: '',
-    id: 0
+    id: 0,
+    layers_danger: '',
+    layers_steady: '',
+    layers_fluctuate: ''
   },
 }
 
@@ -18,10 +21,20 @@ export const wmsSlice = createSlice({
       // 而是检测到“草稿state”的更改并根据这些更改生成一个全新的不可变state
       state.value = value.payload
     },
+    resetWms: (state) => {
+      state.value = {
+        work_spaces: '',
+        layers: '',
+        id: 0,
+        layers_danger: '',
+        layers_steady: '',
+        layers_fluctuate: ''
+      }
+    }
   },
 })
 
 // reducer方法的每一个case都会生成一个Action
-export const { setWms } = wmsSlice.actions
+export const { setWms, resetWms } = wmsSlice.actions
 
 export default wmsSlice.reducer

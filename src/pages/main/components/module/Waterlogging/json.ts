@@ -1,3 +1,35 @@
+import danger from '@/assets/image/hexagon/danger.png'
+import steady from '@/assets/image/hexagon/steady.png'
+import fluctuate from '@/assets/image/hexagon/fluctuate.png'
+import dangerChecked from '@/assets/image/hexagon/danger_checked.png'
+import steadyChecked from '@/assets/image/hexagon/steady_checked.png'
+import fluctuateChecked from '@/assets/image/hexagon/fluctuate_checked.png'
+
+export let hexagonList = [
+  {
+    type: 'fluctuate',
+    label: '告警',
+    img: fluctuate,
+    checkImg: fluctuateChecked,
+    value: '18',
+  },
+  {
+    type: 'steady',
+    label: '正常',
+    img: steady,
+    checkImg: steadyChecked,
+    value: '472',
+  },
+  {
+    type: 'danger',
+    label: '离线',
+    img: danger,
+    checkImg: dangerChecked,
+    value: '10',
+  },
+]
+
+
 export let columns = [
   {
     key: 'deviceCode',
@@ -101,25 +133,31 @@ export let listData = [
 /* 公告信息表格数据 */
 export let announcementColumns = [
   {
-    width: '4rem',
     key: 'code',
     title: '公告编号',
+    width: '18.8%'
   }, {
-    width: '3.5rem',
     key: 'custodian',
-    title: '发布人'
+    title: '发布人',
+    width: '18.8%'
   }, {
-    width: '4rem',
     key: 'type',
-    title: '公告类型'
+    title: '公告类型',
+    width: '18.8%',
+    style: { color: '#FFD141' }
   }, {
-    width: '5rem',
     key: 'time',
-    title: '公告时间'
+    title: '公告时间',
+    width: '18.8%'
   }, {
-    width: '10rem',
     key: 'title',
-    title: '公告标题'
+    title: '公告标题',
+    width: '24.8%',
+    style: {
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    }
   }
 ]
 export let announcementListData = [
@@ -171,30 +209,35 @@ export let announcementListData = [
 /* 事件处理情况表格数据 */
 export let eventProcessingColumns = [
   {
-    width: '3.2rem',
     key: 'eventType',
     title: '工单名称',
+    width: '20.1%'
   }, {
-    width: '4rem',
     key: 'description',
-    title: '处理人'
+    title: '处理人',
+    width: '14%'
   }, {
-    width: '6rem',
     key: 'area',
-    title: '涉事区域'
+    title: '涉事区域',
+    width: '23.9%',
+    style: {
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    }
   },
   {
-    width: '6.5rem',
     key: 'time',
-    title: '发生时间'
+    title: '发生时间',
+    width: '14%'
   }, {
-    width: '2rem',
     key: 'extent',
-    title: '紧急程度'
+    title: '紧急程度',
+    width: '14%'
   }, {
-    width: '5.5rem',
     key: 'state',
-    title: '状态'
+    title: '状态',
+    width: '14%',
   },
 ]
 
@@ -248,6 +291,203 @@ export let eventProcessingListData = [
     extent: '3',
     personnel: '城建科刘安',
     state: '审核中'
+  }, {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道航海路',
+    description: '城建科刘安',
+    extent: '1',
+    personnel: '城建科刘安',
+    state: '已办结'
+  }, {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道永玄路',
+    description: '城建科刘安',
+    extent: '1',
+    personnel: '城建科刘安',
+    state: '已办结'
+  }, {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道胜桑路',
+    description: '城建科刘安',
+    extent: '2',
+    personnel: '城建科刘安',
+    state: '已办结'
+  }, {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道九华路',
+    description: '城建科刘安',
+    extent: '3',
+    personnel: '城建科刘安',
+    state: '审核中'
   },
+  {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道科城街',
+    description: '城建科刘安',
+    extent: '4',
+    personnel: '城建科刘安',
+    state: '已办结'
+  }, {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道三卫路',
+    description: '城建科刘安',
+    extent: '3',
+    personnel: '城建科刘安',
+    state: '审核中'
+  }, {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道航海路',
+    description: '城建科刘安',
+    extent: '1',
+    personnel: '城建科刘安',
+    state: '已办结'
+  }, {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道永玄路',
+    description: '城建科刘安',
+    extent: '1',
+    personnel: '城建科刘安',
+    state: '已办结'
+  }, {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道胜桑路',
+    description: '城建科刘安',
+    extent: '2',
+    personnel: '城建科刘安',
+    state: '已办结'
+  }, {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道九华路',
+    description: '城建科刘安',
+    extent: '3',
+    personnel: '城建科刘安',
+    state: '审核中'
+  },
+  {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道科城街',
+    description: '城建科刘安',
+    extent: '4',
+    personnel: '城建科刘安',
+    state: '已办结'
+  }, {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道三卫路',
+    description: '城建科刘安',
+    extent: '3',
+    personnel: '城建科刘安',
+    state: '审核中'
+  }, {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道航海路',
+    description: '城建科刘安',
+    extent: '1',
+    personnel: '城建科刘安',
+    state: '已办结'
+  }, {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道永玄路',
+    description: '城建科刘安',
+    extent: '1',
+    personnel: '城建科刘安',
+    state: '已办结'
+  }, {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道胜桑路',
+    description: '城建科刘安',
+    extent: '2',
+    personnel: '城建科刘安',
+    state: '已办结'
+  }, {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道九华路',
+    description: '城建科刘安',
+    extent: '3',
+    personnel: '城建科刘安',
+    state: '审核中'
+  },
+  {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道科城街',
+    description: '城建科刘安',
+    extent: '4',
+    personnel: '城建科刘安',
+    state: '已办结'
+  }, {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道三卫路',
+    description: '城建科刘安',
+    extent: '3',
+    personnel: '城建科刘安',
+    state: '审核中'
+  }, {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道航海路',
+    description: '城建科刘安',
+    extent: '1',
+    personnel: '城建科刘安',
+    state: '已办结'
+  }, {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道永玄路',
+    description: '城建科刘安',
+    extent: '1',
+    personnel: '城建科刘安',
+    state: '已办结'
+  }, {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道胜桑路',
+    description: '城建科刘安',
+    extent: '2',
+    personnel: '城建科刘安',
+    state: '已办结'
+  }, {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道九华路',
+    description: '城建科刘安',
+    extent: '3',
+    personnel: '城建科刘安',
+    state: '审核中'
+  },
+  {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道科城街',
+    description: '城建科刘安',
+    extent: '4',
+    personnel: '城建科刘安',
+    state: '已办结'
+  }, {
+    eventType: '预警',
+    time: '2022-12-26',
+    area: '乔司街道三卫路',
+    description: '城建科刘安',
+    extent: '3',
+    personnel: '城建科刘安',
+    state: '审核中'
+  },
+
 ]
 

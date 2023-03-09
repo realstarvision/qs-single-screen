@@ -21,7 +21,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* background-image: radial-gradient(circle farthest-side at 40% -10%,#40485c,#232734); */
-  background: rgb(0, 27, 71);
+  /* background: rgb(0, 27, 71); */
+  background-image: url('./image/background/bg.png');
+  background-size: cover;
+  background-position: center;
   /* background: #fff; */
   position: relative;
 }

@@ -1,18 +1,10 @@
 
 .waterlogging_left{
-  margin-top: 5px;
-  .water_acreage,.precipitation{
-    width: 100%;
-    img{
-      width: 100%;
-      height: 100%;
-    }
-   
-  }
   .water_acreage{
     margin-top:20px;
-    margin-bottom: 20px;
     position: relative;
+    height: 23vh;
+    min-height: 200px !important;
     .month{
       position: absolute;
       top: 60px;
@@ -42,55 +34,64 @@
     }
   }
   .top{
-    .right{
-      position: relative;
-      .honeycomb_icon{
-        cursor: pointer;
-        width: 97px;
-        height: 85px;
-      }
-      .danger{
-        position: absolute;
-        top: 100px;
-        left: 30px;
-      }
-      .steady{
-        position: absolute;
-        top:142px;
-        left: 101px;
-        z-index: 999;
-      }
-      .fluctuate{
-        position: absolute;
-        top: 100px;
-        left: 173px;
+    .meteorological{
+      // padding: 0 100px;
+      margin-top: 10px;
+        /* 气象数据 */
+      .weather_module{
+        display: flex;
+        margin-top: 20px;
+        .icon{
+          width:40px;
+          height:40px;
+        }
+        .right{
+          display: flex;
+          flex-direction: column;
+          justify-content: space-around;
+          .label{
+            font-size:12px;
+            font-weight: 400; 
+            color:#eee
+          }
+          .data{
+            margin-top: 3px;
+            font-size:12px;
+            color: #278CE5;
+          }
+        }
       }
     }
-    
-    img{
-      width: 100%;
-    }
-    .device-item{
-      width: 79.67px;
-      height: 91.99px;
-      // background-image: url('../../assets/iamge/charts/device_icon.png');
-      // background-size: 100% 100%;
-    }
+
+
   }
   .well_lid{
     position: relative;
-    img{
-      width: 100%;
-    }
-    .table-class{
-      height: 170px;
+    margin-top: 40px;
+    height: 285px;
+    .echart{
+      position: relative;
+      margin-top: 15px;
+      height: 210px;
+      overflow: hidden;
+      .doughnut_chart{
+        width: 240px;
+        height: 240px;
+        position: absolute;
+  
+        top: 50%;
+        left: 50%;
+        margin-top: -120px;
+        margin-left: -120px;
+        animation: rotate 4.5s linear 1s  infinite;
+      }
     }
   }
 
   /* 开关按钮 */
   .switch{
     position: absolute;
-    top: 30px;
+    top: 35px;
     right: 0;
     display: flex;
     align-items: center;
@@ -102,21 +103,20 @@
   }
 
   .check{
-    width: 300px;
+    width: 100%;
     height: 30px;
     text-align: center;
-    position: absolute;
-    bottom: -25px;
-    left: 50%;
-    transform: translateX(-50%);
-    line-height: 30px;
+    // position: absolute;
+    // bottom: 0;
+    // left: 50%;
+    // transform: translateX(-50%);
+    // line-height: 30px;
     font-size: 14px;
     color: #FFFFFF;
-    background-color: #044D8D;
-    border-top-right-radius: 4px;
-    border-top-left-radius: 4px;
+    // background-color: #044D8D;
+    // border-top-right-radius: 4px;
+    // border-top-left-radius: 4px;
     cursor: pointer;
-  
     &:hover{
       opacity: 0.8;
     }
@@ -125,24 +125,22 @@
 
 .waterlogging_right{
   .table_box{
-    img{
-      width: 100%;
-      margin-bottom: 10px;
-    }
     .announcement_table{
-      height: 150px !important;
+      height: 16vh;
+      min-height: 100px !important;
     }
   }
   
   .event_processing_waterlogging{
     position: relative;
-    margin-top: 60px;
+    margin-top: 30px;
     margin-bottom: 30px;
     img{
       top: -25px;
       position: absolute;
       width: 100%;
     }
-    height: 310px;
+    min-height: 220px !important;
+    height: 25vh;
   }
 }

@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { Box, Fade } from '@mui/material'
-import { keyArea } from '@/components/Map/json'
 import SvgIcon from '@/components/SvgIcon'
-import key_settlement_area_title from '@/assets/image/keyAreas/key_settlement_area_title.png'
-import time_bar from '@/assets/image/keyAreas/time_bar.png'
+import Title from '@/pages/main/components/Title'
 import { circularRingOption, linearGradientOption } from './option'
 import Echarts from '@/components/Echarts'
-import rectangle from '@/assets/image/map/rectangle.png'
-// import back_btn from '@/assets/image/png/back_btn.png'
+import TimeBar from '@/components/TimeBar'
 import { keyArea as keyArealist, roadPoinList, bridgePoinList } from '@/components/Map/json'
 import './style.scss'
 import '../common.scss'
 
-export default function index({ onBack, keyAreaId, onItemClick, type }) {
+import rectangle from '@/assets/image/map/rectangle.png'
+
+export default function index({ keyAreaId, onItemClick }) {
   let line = ['道路', '桥梁', '建筑']
   let xAxisData = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
 
@@ -34,31 +33,10 @@ export default function index({ onBack, keyAreaId, onItemClick, type }) {
   let [list, setList] = useState([])
 
   useEffect(() => {
-    let itemData: any = [...keyArealist, ...roadPoinList, ...bridgePoinList].find(item => {
+    let itemData: any = [...keyArealist].find(item => {
       return item.id === keyAreaId
     })
-    let listData = []
-    switch (type) {
-      case 'keyArea':
-        listData = keyArealist
-        break
-      case 'road':
-        listData = roadPoinList
-        break
-      case 'bridge':
-        listData = bridgePoinList
-        break
-      case 'danger':
-        listData = [...keyArealist, ...roadPoinList, ...bridgePoinList].filter(item => {
-          return item.type === 'danger'
-        })
-        break
-      case 'fluctuate':
-        listData = [...keyArealist, ...roadPoinList, ...bridgePoinList].filter(item => {
-          return item.type === 'fluctuate'
-        })
-        break
-    }
+    let listData = keyArealist
     Object.keys(data).forEach(item => {
       data[item] = itemData[item]
     })
@@ -66,26 +44,24 @@ export default function index({ onBack, keyAreaId, onItemClick, type }) {
     setList(listData)
   }, [keyAreaId])
 
-  /* 返回按钮 */
-  const handleBack = () => {
-    onBack()
-  }
-
   /* 列表项点击事件 */
   const handleItemClick = itemData => {
-    Object.keys(data).forEach(item => {
-      data[item] = itemData[item]
-    })
-    setData({ ...data })
-    onItemClick(itemData.coordinates)
+    onItemClick(itemData)
     setVisible(true)
   }
+
+  /* 十二期选择器的点击事件 */
+  const handleTimeBarClick = active => {
+    console.log(active)
+  }
+
   return (
     <>
       <Box className={'leftBox leftBox_keyAreas'}>
         <Box className={'left'}>
-          <img src={key_settlement_area_title}></img>
-
+          <Box className="top">
+            <Title title="重点沉降监测区域"></Title>
+          </Box>
           <Box className={'list'}>
             {list.map((item, index) => (
               <Box onClick={() => handleItemClick(item)} className={'item ' + (item.id === data.id ? 'active' : '')}>
@@ -98,53 +74,60 @@ export default function index({ onBack, keyAreaId, onItemClick, type }) {
       </Box>
       <Fade in={visible}>
         <Box className={'rightBox rightBox_keyAreas'}>
-          <Box className="title_bar">
-            <div className="title_info">
-              <span className="title">{data.title}</span>
-              <div
-                className={
-                  'tigs ' +
-                  (data.type == 'danger' ? 'tigs_red' : data.type == 'fluctuate' ? 'tigs_yellow' : 'tigs_green')
-                }
-              >
-                {data.type === 'danger' ? '危险区域' : data.type === 'fluctuate' ? '波动区域' : '平稳区域'}
+          <Box className="rightBox-warpper">
+            <Box className="title_bar">
+              <div className="title_info">
+                <span className="title">{data.title}</span>
+                <div
+                  className={
+                    'tigs ' +
+                    (data.type == 'danger' ? 'tigs_red' : data.type == 'fluctuate' ? 'tigs_yellow' : 'tigs_green')
+                  }
+                >
+                  {data.type === 'danger' ? '危险区域' : data.type === 'fluctuate' ? '波动区域' : '平稳区域'}
+                </div>
               </div>
-            </div>
-            <SvgIcon
-              svgName="closeX"
-              svgClass="closeX"
-              onClick={() => {
-                setVisible(false)
+              <SvgIcon
+                svgName="closeX"
+                svgClass="closeX"
+                onClick={() => {
+                  setVisible(false)
+                }}
+              ></SvgIcon>
+            </Box>
+            {/* <img
+              src={rectangle}
+              style={{
+                width: '70%',
               }}
-            ></SvgIcon>
+            /> */}
+            <p className="mt font">经纬度：[24,45]</p>
+            <p className="mt font">地址信息：乔司街道</p>
+            <p className="mt font">监测时间：{data.time}</p>
+            <p className="mt font">最大沉降量：{data.accumulativeTotal}</p>
+            <p className="mt font">沉降面积统计</p>
+            <div className="subsidenceAreaEchart_box">
+              <Echarts options={circularRingOption(data.acreage, data.circularRingData)}></Echarts>
+            </div>
+            <p className="font">沉降面积变化</p>
+            <div className="trendSettlementEchart_box">
+              <Echarts
+                options={linearGradientOption({
+                  list: data.lineChartData,
+                  line,
+                  xAxisData,
+                  grid: { left: 35, top: '20%', bottom: 20, right: '3%' },
+                })}
+              ></Echarts>
+            </div>
           </Box>
-          <img
-            src={rectangle}
-            style={{
-              width: '70%',
-            }}
-          />
-          <p className="mt font">监测时间：{data.time}</p>
-          <p className="mt font">累计沉降：{data.accumulativeTotal}</p>
-          <p className="mt font">沉降面积统计</p>
-          <div className="subsidenceAreaEchart_box">
-            <Echarts options={circularRingOption(data.acreage, data.circularRingData)}></Echarts>
-          </div>
-          <p className="font">沉降趋势统计</p>
-          <div className="trendSettlementEchart_box">
-            <Echarts
-              options={linearGradientOption({
-                list: data.lineChartData,
-                line,
-                xAxisData,
-                grid: { left: 35, top: '20%', bottom: 20, right: '3%' },
-              })}
-            ></Echarts>
-          </div>
         </Box>
       </Fade>
 
-      <img src={time_bar} className="time_bar" />
+      {/* 时间轴 */}
+      <div className="time_bar">
+        <TimeBar dataIndex={1} onClick={handleTimeBarClick}></TimeBar>
+      </div>
       {/* <img src={back_btn} className="back_btn" onClick={handleBack} /> */}
     </>
   )

@@ -1,9 +1,9 @@
 /* 六边形图片 */
 import danger from '@/assets/image/hexagon/danger.png'
-import steady from '@/assets/image/hexagon/steady.png'
-import fluctuate from '@/assets/image/hexagon/fluctuate.png'
 import dangerChecked from '@/assets/image/hexagon/danger_checked.png'
+import steady from '@/assets/image/hexagon/steady.png'
 import steadyChecked from '@/assets/image/hexagon/steady_checked.png'
+import fluctuate from '@/assets/image/hexagon/fluctuate.png'
 import fluctuateChecked from '@/assets/image/hexagon/fluctuate_checked.png'
 export let dangerLevelHexagonList = [
   {
@@ -29,16 +29,23 @@ export let dangerLevelHexagonList = [
   },
 ]
 
-export let menuList = [
+// 沉降瓦图列表
+export let wmsList = [
   {
     id: 0,
     work_spaces: 'QS_demo',
     layers: 'QS_demo:QS_3_month_tif',
+    layers_danger: 'QS_demo:qs_road_shp_1025',
+    layers_steady: 'QS_demo:QS_metro_tiff',
+    layers_fluctuate: 'QS_demo:QS_SL3month_tif',
   },
   {
     id: 1,
     work_spaces: 'QS_demo',
     layers: 'QS_demo:qs_road_shp_1025',
+    layers_danger: 'QS_demo:qs_group_20221227',
+    layers_steady: 'qs_grass_shp',
+    layers_fluctuate: 'qs_water_shp',
   },
   {
     id: 2,
@@ -111,7 +118,12 @@ export let announcementColumns = [
   }, {
     key: 'time',
     title: '公告时间',
-    width: '18.8%'
+    width: '18.8%',
+    style: {
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    }
   }, {
     key: 'title',
     title: '公告标题',
@@ -220,7 +232,12 @@ export let eventProcessingColumns = [
   }, {
     key: 'personnel',
     title: '处理人',
-    width: '14%'
+    width: '14%',
+    style: {
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    }
   }, {
     key: 'area',
     title: '涉事区域',
@@ -233,7 +250,12 @@ export let eventProcessingColumns = [
   }, {
     key: 'time',
     title: '发生时间',
-    width: '14%'
+    width: '14%',
+    style: {
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+    }
   }, {
     key: 'extent',
     title: '紧急程度',

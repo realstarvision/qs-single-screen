@@ -3,11 +3,16 @@ import { Box } from '@mui/material'
 import event_count from '@/assets/image/png/event_count.png'
 import s from './s.module.scss'
 
-export default function index({ label1 = '待处理事件总量', label2 = '已处理事件总量', count1 = 0, count2 = 0 }) {
+export default function index({
+  labelPending = '待处理事件总量',
+  labelProcessed = '已处理事件总量',
+  countPending = 0,
+  countProcessed = 0,
+}) {
   return (
     <Box className={s.container}>
-      <Module label={label1} count={count1} />
-      <Module label={label2} count={count2} />
+      <Module label={labelPending} count={countPending} />
+      <Module label={labelProcessed} count={countProcessed} />
     </Box>
   )
 }

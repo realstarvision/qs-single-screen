@@ -2,20 +2,13 @@ import React, { useEffect, useState, useRef } from 'react'
 import { Box, Fade, Grid, FormLabel, MenuItem } from '@mui/material'
 import Input from '@/components/Input'
 import MyMenuItem from '@/components/MenuItem'
-import { keyArea } from '@/components/Map/json'
+import Title from '@/pages/main/components/Title'
 import SvgIcon from '@/components/SvgIcon'
-import well_lid_title from '@/assets/image/well_lid/well_lid_title.png'
-import time_bar from '@/assets/image/keyAreas/time_bar.png'
-import Echarts from '@/components/Echarts'
-import rectangle from '@/assets/image/map/rectangle.png'
 import { garbageSorting } from '@/components/Map/json'
 import './style.scss'
 import '../common.scss'
 
-/* 视频图片 */
-import garbage_device_list_title_long from '@/assets/image/charts/garbage_device_list_title_long.png'
-
-export default function index({ onBack, garbageId, onItemClick }) {
+export default function index({ garbageId, onItemClick }) {
   let deviceState = ['全部', '在线', '离线']
   // 显示状态
   let [visible, setVisible] = useState(true)
@@ -46,28 +39,14 @@ export default function index({ onBack, garbageId, onItemClick }) {
     setData({ ...data })
   }, [garbageId])
 
-  /* 返回按钮 */
-  const handleBack = () => {
-    onBack()
-  }
-
   /* 列表项点击事件 */
   const handleItemClick = itemData => {
-    // keyArea.forEach(ele => {
-    //   ele.icon = ele.defaultIcon
-    // })
-    // item.icon = item.activeIcon
-    Object.keys(data).forEach(item => {
-      data[item] = itemData[item]
-    })
-    setData({ ...data })
-    onItemClick(itemData.coordinates)
+    onItemClick(itemData)
     setVisible(true)
   }
 
   /* 下拉框选择 */
   const handleInputChange = (e, type) => {
-    console.log(e)
     formParams[type] = e.target.value
     setFormParams({ ...formParams })
     let newList = []
@@ -85,35 +64,37 @@ export default function index({ onBack, garbageId, onItemClick }) {
   }
   return (
     <>
-      <Box className={'leftBox leftBox_wellLid'}>
+      <Box className={'leftBox leftBox_garbage'}>
         <Box className={'left'}>
-          <img src={garbage_device_list_title_long}></img>
-          <Grid container spacing={{ xs: 1 }} className="from">
-            <Grid item xs={6} className="from-item">
-              <FormLabel component="span" className="label">
-                设备状态
-              </FormLabel>
-              <Input
-                select
-                required
-                id="phoneInput"
-                size="small"
-                placeholder="设备状态"
-                value={formParams.state}
-                onChange={e => handleInputChange(e, 'state')}
-                autoComplete="off"
-                sx={{
-                  width: '70%',
-                }}
-              >
-                {deviceState.map((item, index) => (
-                  <MyMenuItem key={index} value={item}>
-                    {item}
-                  </MyMenuItem>
-                ))}
-              </Input>
+          <Box className="top">
+            <Title title="垃圾桶设备列表"></Title>
+            <Grid container spacing={{ xs: 1 }} className="from">
+              <Grid item xs={8} className="from-item">
+                <FormLabel component="span" className="label">
+                  设备状态
+                </FormLabel>
+                <Input
+                  select
+                  required
+                  id="phoneInput"
+                  size="small"
+                  placeholder="设备状态"
+                  value={formParams.state}
+                  onChange={e => handleInputChange(e, 'state')}
+                  autoComplete="off"
+                  sx={{
+                    width: '50%',
+                  }}
+                >
+                  {deviceState.map((item, index) => (
+                    <MyMenuItem key={index} value={item}>
+                      {item}
+                    </MyMenuItem>
+                  ))}
+                </Input>
+              </Grid>
             </Grid>
-          </Grid>
+          </Box>
           <Box className={'list'}>
             {list.map((item, index) => (
               <Box onClick={() => handleItemClick(item)} className={'item ' + (item.id === data.id ? 'active' : '')}>
@@ -153,66 +134,60 @@ export default function index({ onBack, garbageId, onItemClick }) {
         </Box>
       </Box>
       <Fade in={visible}>
-        <Box className={'rightBox rightBox_wellLid'}>
-          <Box className="title_bar">
-            <div className="title_info">
-              <span className="title">{data.code}</span>
-              <p
-                className={
-                  'tigs ' + (data.state === '在线' ? 'tigs_green' : data.state === '离线' ? 'tigs_red' : 'tigs_yellow')
-                }
-              >
-                {data.state}
-              </p>
-            </div>
-            <SvgIcon
+        <Box className={'rightBox rightBox_garbage'}>
+          <Box className="rightBox-warpper">
+            <Box className="title_bar">
+              <div className="title_info">
+                <span className="title">{data.code}</span>
+                <p
+                  className={
+                    'tigs ' +
+                    (data.state === '在线' ? 'tigs_green' : data.state === '离线' ? 'tigs_red' : 'tigs_yellow')
+                  }
+                >
+                  {data.state}
+                </p>
+              </div>
+              {/* <SvgIcon
               svgName="closeX"
               svgClass="closeX"
               onClick={() => {
                 setVisible(false)
               }}
-            ></SvgIcon>
-          </Box>
-          {/* <img
-            src={rectangle}
-            style={{
-              width: '70%',
-              marginTop: '30px',
-            }}
-          /> */}
-          <p className="mt font">地址：{data.position}</p>
-          <p
-            className="mt font"
-            style={{
-              display: 'flex',
-            }}
-          >
-            <span>经纬度：</span>
-            <div>
-              {data.coordinates.length > 0 ? data.coordinates[0] : ''}
-              <br />
-              {data.coordinates.length > 0 ? data.coordinates[1] : ''}
-            </div>
-          </p>
-          <p className="mt font">视频监控</p>
+            ></SvgIcon> */}
+            </Box>
+            <p className="mt font">地址：{data.position}</p>
+            <p
+              className="mt font"
+              style={{
+                display: 'flex',
+              }}
+            >
+              <span>经纬度：</span>
+              <div>
+                {data.coordinates.length > 0 ? data.coordinates[0] : ''}
+                <br />
+                {data.coordinates.length > 0 ? data.coordinates[1] : ''}
+              </div>
+            </p>
+            <p className="mt font">视频监控</p>
 
-          <video
-            key={data.id}
-            className="mt-10"
-            autoPlay={true}
-            loop
-            controls
-            style={{
-              width: '100%',
-            }}
-            src={data.video}
-          >
-            {/* <source src={data.video} type="video/mp4"></source> */}
-          </video>
+            <video
+              key={data.id}
+              className="mt-10"
+              autoPlay={true}
+              loop
+              controls
+              style={{
+                width: '100%',
+              }}
+              src={data.video}
+            >
+              {/* <source src={data.video} type="video/mp4"></source> */}
+            </video>
+          </Box>
         </Box>
       </Fade>
-
-      {/* <img src={back_btn} className="back_btn" onClick={handleBack} /> */}
     </>
   )
 }

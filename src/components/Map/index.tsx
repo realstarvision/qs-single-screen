@@ -1,29 +1,18 @@
 import React, { useEffect, useRef, useImperativeHandle, forwardRef, useState } from 'react'
 import L from 'leaflet'
-import { useSelector, useDispatch } from 'react-redux'
-import { MapContainer, TileLayer, useMap, Polygon, WMSTileLayer, Marker, Popup } from 'react-leaflet'
-import { polygonProcess } from '@/utils/data'
-import {
-  dangerLevelPointData,
-  networkMonitoring,
-  garbageSorting,
-  wellLid1,
-  wellLid2,
-  wellLid3,
-  keyArea,
-  waterlogging,
-  roadPoinList,
-  bridgePoinList,
-  DSMHeightPoint,
-} from './json'
-import { echartTabs } from '@/pages/Details/Waterlogging/json'
-import WMSCapabilities from 'wms-capabilities'
 import axios from 'axios'
-import { setWms } from '@/store/module/wms'
+import { useSelector, useDispatch } from 'react-redux'
+import { MapContainer, Polygon, WMSTileLayer, Marker, Popup } from 'react-leaflet'
+import 'leaflet/dist/leaflet.css'
+import WMSCapabilities from 'wms-capabilities'
+// 引入 leaflet.markercluster  聚合插件
+import 'leaflet.markercluster/dist/MarkerCluster.css'
+import 'leaflet.markercluster/dist/MarkerCluster.Default.css'
+import 'leaflet.markercluster'
+// 工具
+import { polygonProcess, getCenter } from '@/utils/polygon'
+// 样式
 import './style.scss'
-
-// 颜色列表
-const colorArr = ['#fff', '#FFC000', '#dbd700', '#E47508', '#00DB54', '#db2c00', '#00dbd0']
 
 interface WMS {
   work_spaces: ''
@@ -41,18 +30,46 @@ function Icon(iconUrl, iconSize) {
   })
 }
 
+/* 文字 */
+function DivIcon(label, iconSize = 30) {
+  return L.divIcon({
+    html: label,
+    className: 'my-div-icon',
+    //@ts-ignore
+    iconSize: iconSize,
+  })
+}
+
+// 定义聚合点
+let markers = null
+
 /**  map组件  **/
 const index = (
   {
-    active,
     onMarkerClick,
-    coordinates,
-    waterloggingActive,
-    enterQS,
-  }: { active?: number; onMarkerClick?: Function; coordinates; waterloggingActive; enterQS: boolean },
+    DSMHeightPoint = [],
+    markerList = [],
+    polygonList = [],
+    checkedPoint = null,
+    communityOrRegionVisible,
+  }: {
+    active?: number
+    onMarkerClick?: Function
+    coordinates?: any
+    enterQS?: boolean
+    markerList?: Array<any>
+    polygonList?: Array<any>
+    DSMHeightPoint?: Array<any>
+    checkedPoint?: any
+    communityOrRegionVisible?: {
+      community: boolean
+      region: boolean
+    }
+  },
   ref
 ) => {
   const dispatch = useDispatch()
+  let dangerLevel = useSelector((state: { dangerLevel }) => state.dangerLevel.value)
   const map = useRef(null)
   const streetTiff = useRef(null)
   const wmsControler = useRef(null)
@@ -61,14 +78,12 @@ const index = (
   const [capabilities, setCapabilities] = useState(null)
   // const minimap = useMap()
   const [optionsData, setOptionsData] = useState({})
-  // redux获取未读消息数据
-  let wms = useSelector((state: { wms }) => state.wms.value)
-  let dangerLevel = useSelector((state: { dangerLevel }) => state.dangerLevel.value)
-  let networkData = useSelector((state: { networkMonitoring }) => state.networkMonitoring.value)
-  let switchData = useSelector((state: { Switch }) => state.Switch.value)
+  // 地物分类
   let terrainClassificationActive = useSelector(
     (state: { terrainClassificationActive }) => state.terrainClassificationActive.value
   )
+  // redux获取未读消息数据
+  let wms = useSelector(({ wms }) => wms.value)
   // 此处注意useImperativeHandle方法的的第一个参数是目标元素的ref引用
   useImperativeHandle(ref, () => ({
     handleClearPolygon: id => {
@@ -79,6 +94,8 @@ const index = (
       setOptionsData({ ...optionsData })
     },
     SetZoom,
+    handleMarkerCenter,
+    wmsPositioning,
   }))
 
   /* 初始化  */
@@ -100,39 +117,77 @@ const index = (
     callback()
   }, [])
 
-  /* 监听易涝中tab改变事件 */
-  // useEffect(() => {
-  //   if (waterloggingActive !== 2) {
-  //     fitWMSBounds(map.current, 'QS_demo:QS_street_tiff', capabilities)
-  //   }
-  // }, [waterloggingActive])
-
-  /* 监听地物分类的切换事件 */
+  // 监听点位列表和选中的点位
   useEffect(() => {
-    if (terrainClassificationRef.current) {
-      terrainClassificationRef.current.setParams({
-        layers: echartTabs[terrainClassificationActive].layers,
-        url: `${import.meta.env.VITE_BASE_URL}/geoserver/QS_demo/wms`,
-        transparent: true,
-        format: 'image/png',
-        version: '1.1.0',
-        TILED: true,
-      })
+    if (map.current) {
+      // 如果点位列表发生变化并且有数据的时候先清空聚合点位再去添加
+      if (markerList.length > 0 || polygonList.length > 0) {
+        if (!markers) {
+          //@ts-ignore
+          markers = L.markerClusterGroup()
+        } else {
+          markers.clearLayers()
+        }
+        markerList.map(item => {
+          markers.addLayer(createMarker(item))
+        })
+        // 完成点击进入详情的时候清除点位显示多边形
+        if (!checkedPoint) {
+          polygonList.map(item => {
+            // 添加点位到聚合
+            markers.addLayer(createMarker(item))
+          })
+        } else if (checkedPoint && polygonList.length > 0) {
+          if (markers) {
+            markers.clearLayers()
+          }
+        }
+        map.current.addLayer(markers)
+      } else {
+        // 点位列表没有数据的时候清空聚合点位
+        if (markers) {
+          markers.clearLayers()
+        }
+      }
     }
-  }, [terrainClassificationActive])
+  }, [markerList, checkedPoint])
+
+  // 给标记添加事件
+  function createMarker(item) {
+    let marker = L.marker(item.coordinates.length > 1 ? item.coordinates : getCenter(item.coordinates[0]), {
+      icon: Icon(item.icon, item.iconSize),
+    })
+    let html = `  
+      <span>名称：${item.code}</span>
+      <span>地址：${item.position}</span>`
+    // 鼠标移入
+    marker.on('mouseover', e => {
+      //添加文字的方法
+      marker.bindPopup(html, { closeButton: false, minWidth: 90, className: 'marker_popup' }).openPopup()
+    })
+    // 鼠标移出
+    marker.on('mouseout', e => {
+      marker.closePopup()
+    })
+    // 鼠标点击
+    marker.on('click', () => handleMarkerClick(item))
+    // 返回标记
+    return marker
+  }
 
   /* 监听乔司全局唤醒 */
-  useEffect(() => {
-    if (!enterQS) {
-      if (map.current) {
-        // SetZoom('qs_group_cut')
+  // useEffect(() => {
+  //   if (!enterQS) {
+  //     if (map.current) {
+  //       console.log(2222)
 
-        map.current.flyTo([30.357607839433694, 120.26355743408205])
-        map.current.setZoom(12)
-      }
-      dispatch(setWms({ work_spaces: '', layers: '', id: 0 }))
-    }
-  }, [enterQS])
+  //       map.current.flyTo([30.357607839433694, 120.26355743408205], 12)
+  //     }
+  //     // dispatch(setWms({ work_spaces: '', layers: '', id: 0 }))
+  //   } else {
+  //     fitWMSBounds(map.current, 'qs_group_cut', capabilities)
+  //   }
+  // }, [enterQS])
 
   /* 监听wms参数变化 */
   useEffect(() => {
@@ -140,8 +195,38 @@ const index = (
       map.current.on('click', e => {
         console.log(e)
       })
-      wmsControler.current.setParams({
-        layers: wms.layers,
+      wmsPositioning()
+    }
+  }, [wms])
+
+  // 定位函数
+  function wmsPositioning() {
+    wmsControler.current.setParams({
+      layers: wms.layers,
+      url: `${import.meta.env.VITE_BASE_URL}/geoserver/QS_demo/wms`,
+      transparent: true,
+      format: 'image/png',
+      version: '1.1.0',
+      TILED: true,
+    })
+    fitWMSBounds(map.current, wms.layers, capabilities)
+  }
+
+  useEffect(() => {
+    if (wmsControler.current) {
+      if (!dangerLevel.danger && !dangerLevel.steady && !dangerLevel.fluctuate) {
+        wmsControler.current.setOpacity(1)
+      } else {
+        wmsControler.current.setOpacity(0)
+      }
+    }
+  }, [dangerLevel])
+
+  // 地物切换tiff
+  useEffect(() => {
+    if (terrainClassificationRef.current) {
+      terrainClassificationRef.current.setParams({
+        layers: terrainClassificationActive ? terrainClassificationActive.layers : '',
         url: `${import.meta.env.VITE_BASE_URL}/geoserver/QS_demo/wms`,
         transparent: true,
         format: 'image/png',
@@ -150,12 +235,12 @@ const index = (
       })
       fitWMSBounds(map.current, wms.layers, capabilities)
     }
-  }, [wms])
+  }, [terrainClassificationActive])
 
   /* 监听tab切换 */
-  useEffect(() => {
-    SetZoom()
-  }, [active])
+  // useEffect(() => {
+  //   SetZoom()
+  // }, [active])
 
   /* 设置地图缩放 */
   function SetZoom(place = 'QS_demo:QS_street_tiff') {
@@ -163,14 +248,6 @@ const index = (
       fitWMSBounds(map.current, place, capabilities)
     }
   }
-
-  /* 监听点位点击 */
-  useEffect(() => {
-    if (map.current && coordinates.length > 0) {
-      // 移动至
-      map.current.flyTo(coordinates, 17)
-    }
-  }, [JSON.stringify(coordinates)])
 
   /* 将地图居中到目标位置 */
   const fitWMSBounds = async (mapEle, layer_name, res) => {
@@ -185,64 +262,125 @@ const index = (
     ])
   }
 
-  /* 危险等级标记鼠标移入 */
+  /* 标记鼠标移入 */
   const handleDangerLevelPointMouseover = e => {
-    console.log(e)
     e.target.openPopup()
   }
 
-  /* 危险等级标记鼠标移出 */
+  /* 标记鼠标移出 */
   const handleDangerLevelPointMouseout = e => {
-    console.log(e)
     e.target.closePopup()
   }
 
   /* Marker的点击事件 */
-  const handleMarkerClick = (e, type, item) => {
+  const handleMarkerClick = item => {
     /* 移动至点 */
-    map.current.flyTo(item.coordinates, 17)
+    handleMarkerCenter(item)
     /* 触发父级点击事件 */
-    onMarkerClick(e, type, item)
+    onMarkerClick(item)
+  }
+
+  /* Marker点位居中 */
+  const handleMarkerCenter = item => {
+    /* 移动至点 */
+    map.current.flyTo(item.coordinates.length > 1 ? item.coordinates : getCenter(item.coordinates[0]), 17)
+  }
+
+  /* 添加多边形图层 */
+  function addLayer(latlngs, color) {
+    let polygon
+    polygon = L.polygon(latlngs, {
+      color,
+      fillOpacity: 0,
+    }).addTo(map.current)
+    return polygon
+  }
+  /* 清除所有图层 */
+  function clearLayers() {
+    if (map.current) {
+      const layers = map.current._layers
+      for (let i in layers) {
+        if (layers[i]._latlngs) {
+          map.current.removeLayer(layers[i])
+        }
+      }
+    }
   }
 
   return (
     <>
       <MapContainer
         ref={map}
+        //@ts-ignore
         center={[30.357607839433694, 120.26355743408205]}
-        zoom={12}
+        zoom={13}
         zoomControl={false}
         attributionControl={false}
         style={{
           width: '100%',
           height: '100%',
-          background: '#001B47',
+          background: 'transparent',
         }}
-        // minZoom={7}
-        // maxZoom={13}
+        minZoom={11}
       >
-        {!enterQS && (
-          <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" />
-        )}
-        {wms.layers && enterQS && (
-          <WMSTileLayer ref={wmsControler} url={`${import.meta.env.VITE_BASE_URL}/geoserver/QS_demo/wms`} />
-        )}
-
-        {/* DSM模型 */}
-        {waterloggingActive === 0 && active == 1 && enterQS && (
+        {/* {!enterQS && (
+          <TileLayer
+            url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+            zIndex={0}
+          />
+        )} */}
+        {/* 沉降标签对应图斑 */}
+        {wms.layers && (
           <WMSTileLayer
+            ref={wmsControler}
             url={`${import.meta.env.VITE_BASE_URL}/geoserver/QS_demo/wms`}
-            layers="QS_demo:test2"
+            // @ts-ignore
+            zIndex={2}
+            // layers={wms.layers}
             transparent={true}
             format="image/png"
             version="1.1.0"
           />
         )}
-
-        {/* 地物分类 */}
-        {waterloggingActive === 1 && active == 1 && enterQS && (
+        {/* 沉降危险等级对应tiff */}
+        {wms.layers_danger && dangerLevel.danger && (
           <WMSTileLayer
-            layers={echartTabs[terrainClassificationActive].layers}
+            url={`${import.meta.env.VITE_BASE_URL}/geoserver/QS_demo/wms`}
+            // @ts-ignore
+            zIndex={2}
+            layers={wms.layers_danger}
+            transparent={true}
+            format="image/png"
+            version="1.1.0"
+          />
+        )}
+        {wms.layers_steady && dangerLevel.steady && (
+          <WMSTileLayer
+            url={`${import.meta.env.VITE_BASE_URL}/geoserver/QS_demo/wms`}
+            // @ts-ignore
+            zIndex={2}
+            layers={wms.layers_steady}
+            transparent={true}
+            format="image/png"
+            version="1.1.0"
+          />
+        )}
+        {wms.layers_fluctuate && dangerLevel.fluctuate && (
+          <WMSTileLayer
+            url={`${import.meta.env.VITE_BASE_URL}/geoserver/QS_demo/wms`}
+            // @ts-ignore
+            zIndex={2}
+            layers={wms.layers_fluctuate}
+            transparent={true}
+            format="image/png"
+            version="1.1.0"
+          />
+        )}
+        {/* 地物分类 */}
+        {terrainClassificationActive && (
+          <WMSTileLayer
+            // @ts-ignore
+            layers={terrainClassificationActive.layers}
             ref={terrainClassificationRef}
             // layers={echartTabs[terrainClassificationActive].layers}
             url={`${import.meta.env.VITE_BASE_URL}/geoserver/QS_demo/wms`}
@@ -251,288 +389,120 @@ const index = (
             version="1.1.0"
           />
         )}
-
-        {/* 土壤湿度 */}
-        {waterloggingActive === 3 && active == 1 && enterQS && (
-          <WMSTileLayer
-            layers="QS_demo:hsl"
-            url={`${import.meta.env.VITE_BASE_URL}/geoserver/QS_demo/wms`}
-            transparent={true}
-            format="image/png"
-            version="1.1.0"
-          />
-        )}
-
         {/* 乔司底图 */}
         <WMSTileLayer
           ref={streetTiff}
           url={`${import.meta.env.VITE_BASE_URL}/geoserver/QS_demo/wms`}
+          // @ts-ignore
           layers="qs_group_cut"
           transparent={true}
           format="image/png"
           version="1.1.0"
+          zIndex={1}
         />
-
-        {/* 乔司底图 */}
-        {!enterQS && (
-          <WMSTileLayer
-            ref={streetTiff}
-            url={`${import.meta.env.VITE_BASE_URL}/geoserver/QS_demo/wms`}
-            layers="qs_group_cut"
-            transparent={true}
-            format="image/png"
-            version="1.1.0"
-            // TILED={true}
-          />
-        )}
-
-        {enterQS && (
+        {/* 多边形点位 polygonList */}
+        {checkedPoint &&
+          polygonList.map((item, index) => (
+            <Polygon
+              key={item.id}
+              positions={item.coordinates}
+              pathOptions={{ color: item.color }}
+              eventHandlers={{
+                mouseover: handleDangerLevelPointMouseover,
+                mouseout: handleDangerLevelPointMouseout,
+                click: e => handleMarkerClick(item),
+              }}
+            >
+              <Popup
+                // @ts-ignore
+                minWidth={90}
+                closeButton={false}
+                className="marker_popup"
+              >
+                <span>名称：{item.code}</span>
+                <span>地址：{item.position}</span>
+              </Popup>
+            </Polygon>
+          ))}
+        {/* 社区范围和管理区域 */}
+        {/* {
           <>
-            {/* 道路沉降 */}
-            {wms.id === 1 &&
-              active == 0 &&
-              roadPoinList.map(item => (
+            {communityOrRegionVisible.community && (
+              <>
+                <Polygon
+                  positions={[
+                    [
+                      [30.33236106856479, 120.27634620666505],
+                      [30.338620743756692, 120.27634620666505],
+                      [30.338620743756692, 120.28643131256105],
+                      [30.33236106856479, 120.28643131256105],
+                    ],
+                  ]}
+                  pathOptions={{ color: '#34E7FF' }}
+                ></Polygon>
                 <Marker
-                  draggable={false}
-                  eventHandlers={{
-                    mouseover: handleDangerLevelPointMouseover,
-                    mouseout: handleDangerLevelPointMouseout,
-                    click: e => handleMarkerClick(e, 'road', item),
-                  }}
-                  position={item.coordinates as any}
-                  icon={Icon(item.icon, [25, 20])}
-                >
-                  <Popup minWidth={90} closeButton={false} className="marker_popup">
-                    {/* <span>{item.title}</span> */}
-                    <span>名称：{item.code}</span>
-                    {/* <span>经度：{item.coordinates[1].toFixed(6)}</span>
-                    <span>维度：{item.coordinates[0].toFixed(6)}</span> */}
-                    <span>地址：{item.position}</span>
-                  </Popup>
-                </Marker>
-              ))}
-
-            {/* 桥梁沉降 */}
-            {wms.id === 2 &&
-              active == 0 &&
-              bridgePoinList.map(item => (
+                  position={getCenter([
+                    [30.33236106856479, 120.27634620666505],
+                    [30.338620743756692, 120.27634620666505],
+                    [30.338620743756692, 120.28643131256105],
+                    [30.33236106856479, 120.28643131256105],
+                  ])}
+                  // @ts-ignore
+                  icon={DivIcon('社区A', 50)}
+                ></Marker>
+              </>
+            )}
+            {communityOrRegionVisible.region && (
+              <>
+                <Polygon
+                  positions={[
+                    [
+                      [30.36413681554502, 120.25205612182619],
+                      [30.37154226650744, 120.25205612182619],
+                      [30.37154226650744, 120.2663040161133],
+                      [30.36413681554502, 120.2663040161133],
+                    ],
+                  ]}
+                  pathOptions={{ color: '#066AE0' }}
+                ></Polygon>
                 <Marker
-                  draggable={false}
-                  eventHandlers={{
-                    mouseover: handleDangerLevelPointMouseover,
-                    mouseout: handleDangerLevelPointMouseout,
-                    click: e => handleMarkerClick(e, 'bridge', item),
-                  }}
-                  position={item.coordinates as any}
-                  icon={Icon(item.icon, [25, 20])}
-                >
-                  <Popup minWidth={90} closeButton={false} className="marker_popup">
-                    {/* <span>{item.title}</span> */}
-                    <span>名称：{item.code}</span>
-                    {/* <span>经度：{item.coordinates[1].toFixed(6)}</span>
-                    <span>维度：{item.coordinates[0].toFixed(6)}</span> */}
-                    <span>地址：{item.position}</span>
-                  </Popup>
-                </Marker>
-              ))}
-
-            {/* 重点区域 */}
-            {wms.id === 3 &&
-              active == 0 &&
-              keyArea.map(item => (
-                <Marker
-                  draggable={false}
-                  eventHandlers={{
-                    mouseover: handleDangerLevelPointMouseover,
-                    mouseout: handleDangerLevelPointMouseout,
-                    click: e => handleMarkerClick(e, 'keyArea', item),
-                  }}
-                  position={item.coordinates as any}
-                  icon={Icon(item.icon, [25, 20])}
-                >
-                  <Popup minWidth={90} closeButton={false} className="marker_popup">
-                    <span>名称：{item.code}</span>
-                    {/* <span>经度：{item.coordinates[1].toFixed(6)}</span>
-                    <span>维度：{item.coordinates[0].toFixed(6)}</span> */}
-                    <span>地址：{item.position}</span>
-                  </Popup>
-                </Marker>
-              ))}
-
-            {/* 危险等级 */}
-            {[...keyArea, ...bridgePoinList, ...roadPoinList].map(item => {
-              return (item.type === 'danger' && dangerLevel.danger) ||
-                (item.type === 'fluctuate' && dangerLevel.fluctuate) ? (
-                <Marker
-                  draggable={false}
-                  eventHandlers={{
-                    mouseover: handleDangerLevelPointMouseover,
-                    mouseout: handleDangerLevelPointMouseout,
-                    click: e => handleMarkerClick(e, item.type, item),
-                  }}
-                  position={item.coordinates as any}
-                  icon={Icon(item.icon, [25, 20])}
-                >
-                  <Popup minWidth={90} closeButton={false} className="marker_popup">
-                    <span>名称：{item.code}</span>
-                    {/* <span>经度：{item.coordinates[1].toFixed(6)}</span>
-                    <span>维度：{item.coordinates[0].toFixed(6)}</span> */}
-                    <span>地址：{item.position}</span>
-                  </Popup>
-                </Marker>
-              ) : (
-                ''
-              )
-            })}
-
-            {/* 管网监测 */}
-            {networkMonitoring.map(item => {
-              return (item.type === 'offline' && networkData.offline) ||
-                (item.type === 'normal' && networkData.normal) ||
-                (item.type === 'alarm' && networkData.alarm) ? (
-                <Marker
-                  draggable={false}
-                  eventHandlers={{
-                    mouseover: handleDangerLevelPointMouseover,
-                    mouseout: handleDangerLevelPointMouseout,
-                  }}
-                  position={item.coordinates as any}
-                  icon={Icon(item.icon, [25, 20])}
-                >
-                  <Popup minWidth={90} closeButton={false} className="marker_popup">
-                    <span>名称：{item.code}</span>
-                    {/* <span>经度：{item.coordinates[1].toFixed(6)}</span>
-                    <span>维度：{item.coordinates[0].toFixed(6)}</span> */}
-                    <span>地址：{item.position}</span>
-                  </Popup>
-                </Marker>
-              ) : (
-                ''
-              )
-            })}
-            {/* 污水井 */}
-            {active == 1 &&
-              switchData.wellLid &&
-              wellLid1.map(item => {
-                return (
-                  <Marker
-                    draggable={false}
-                    eventHandlers={{
-                      mouseover: handleDangerLevelPointMouseover,
-                      mouseout: handleDangerLevelPointMouseout,
-                      click: e => handleMarkerClick(e, 'wellLid', item),
-                    }}
-                    position={item.coordinates as any}
-                    icon={Icon(item.icon, [30, 40])}
-                  >
-                    <Popup minWidth={90} closeButton={false} className="marker_popup">
-                      <span>名称：{item.title}</span>
-                      {/* <span>经度：{item.coordinates[1].toFixed(6)}</span>
-                      <span>维度：{item.coordinates[0].toFixed(6)}</span> */}
-                      <span>地址：{item.position}</span>
-                    </Popup>
-                  </Marker>
-                )
-              })}
-            {/* 雨水井 */}
-            {active == 1 &&
-              switchData.wellLid &&
-              wellLid2.map(item => {
-                return (
-                  <Marker
-                    draggable={false}
-                    eventHandlers={{
-                      mouseover: handleDangerLevelPointMouseover,
-                      mouseout: handleDangerLevelPointMouseout,
-                      click: e => handleMarkerClick(e, 'wellLid', item),
-                    }}
-                    position={item.coordinates as any}
-                    icon={Icon(item.icon, [30, 40])}
-                  >
-                    <Popup minWidth={90} closeButton={false} className="marker_popup">
-                      <span>名称：{item.title}</span>
-                      {/* <span>经度：{item.coordinates[1].toFixed(6)}</span>
-                      <span>维度：{item.coordinates[0].toFixed(6)}</span> */}
-                      <span>地址：{item.position}</span>
-                    </Popup>
-                  </Marker>
-                )
-              })}
-
-            {/* 涝 */}
-            {active == 1 &&
-              switchData.waterAcreage &&
-              waterlogging.map(item => {
-                return (
-                  <Marker
-                    draggable={false}
-                    eventHandlers={{
-                      mouseover: handleDangerLevelPointMouseover,
-                      mouseout: handleDangerLevelPointMouseout,
-                      click: e => handleMarkerClick(e, 'waterlogging', item),
-                    }}
-                    position={item.coordinates as any}
-                    icon={Icon(item.icon, [30, 40])}
-                  >
-                    <Popup minWidth={90} closeButton={false} className="marker_popup">
-                      <span>名称：{item.title}</span>
-                      {/* <span>经度：{item.coordinates[1].toFixed(6)}</span>
-                      <span>维度：{item.coordinates[0].toFixed(6)}</span> */}
-                      <span>地址：{item.position}</span>
-                    </Popup>
-                  </Marker>
-                )
-              })}
-            {/* DSM高度点位 */}
-            {active == 1 &&
-              waterloggingActive === 0 &&
-              DSMHeightPoint.map(item => {
-                return (
-                  <Marker
-                    draggable={false}
-                    eventHandlers={{
-                      mouseover: handleDangerLevelPointMouseover,
-                      mouseout: handleDangerLevelPointMouseout,
-                      // click: e => handleMarkerClick(e, 'waterlogging', item),
-                    }}
-                    position={item.coordinates as any}
-                    icon={Icon(item.icon, [25, 20])}
-                  >
-                    <Popup minWidth={90} closeButton={false} className="marker_popup">
-                      <span>名称：{item.code}</span>
-                      {/* <span>经度：{item.coordinates[1].toFixed(6)}</span>
-                      <span>维度：{item.coordinates[0].toFixed(6)}</span> */}
-                      <span>地址：{item.position}</span>
-                      <span>高度：{item.height}</span>
-                    </Popup>
-                  </Marker>
-                )
-              })}
-            {/* 垃圾分类 */}
-            {active == 2 &&
-              garbageSorting.map(item => {
-                return (
-                  <Marker
-                    draggable={false}
-                    eventHandlers={{
-                      mouseover: handleDangerLevelPointMouseover,
-                      mouseout: handleDangerLevelPointMouseout,
-                      click: e => handleMarkerClick(e, 'garbage', item),
-                    }}
-                    position={item.coordinates as any}
-                    icon={Icon(item.icon, [30, 41])}
-                  >
-                    <Popup minWidth={90} closeButton={false} className="marker_popup">
-                      <span>名称：{item.code}</span>
-                      {/* <span>经度：{item.coordinates[1].toFixed(6)}</span>
-                      <span>维度：{item.coordinates[0].toFixed(6)}</span> */}
-                      <span>地址：{item.position}</span>
-                    </Popup>
-                  </Marker>
-                )
-              })}
+                  position={getCenter([
+                    [30.36413681554502, 120.25205612182619],
+                    [30.37154226650744, 120.25205612182619],
+                    [30.37154226650744, 120.2663040161133],
+                    [30.36413681554502, 120.2663040161133],
+                  ])}
+                  // @ts-ignore
+                  icon={DivIcon('区域A', 50)}
+                ></Marker>
+              </>
+            )}
           </>
-        )}
+        } */}
+        {/* DSM模型标记高度的点位 */}
+        {DSMHeightPoint.map(item => (
+          <Marker
+            // @ts-ignore
+            draggable={false}
+            eventHandlers={{
+              mouseover: handleDangerLevelPointMouseover,
+              mouseout: handleDangerLevelPointMouseout,
+            }}
+            position={item.coordinates as any}
+            icon={Icon(item.icon, item.iconSize)}
+          >
+            <Popup
+              // @ts-ignore
+              minWidth={90}
+              closeButton={false}
+              className="marker_popup"
+            >
+              <span>名称：{item.code}</span>
+              <span>地址：{item.position}</span>
+              <span>高度：{item.height}</span>
+            </Popup>
+          </Marker>
+        ))}
       </MapContainer>
     </>
   )

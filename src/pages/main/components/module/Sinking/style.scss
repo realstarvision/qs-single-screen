@@ -2,7 +2,6 @@
 .sinking_left{
   .subsidence_risk_prediction{
     margin-top: 5px;
-    overflow: hidden;
     .threat_level{
       position: relative;
       img{
@@ -30,22 +29,59 @@
         height: 250px;
       }
       .doughnut_chart{
-        width: 250px;
-        height: 250px;
+        width: 255px;
+        height: 255px;
         position: absolute;
         top: 50%;
         left: 50%;
-        margin-top: -125px;
-        margin-left: -126px;
+        margin-top: -127.5px;
+        margin-left: -127.5px;
         animation: rotate 4.5s linear 1s  infinite;
 
       }
     }
   }
   .middle{
-    // margin-top: 0px;
+    margin-top: 5px;
     margin-bottom: 15px;
     position: relative;
+    .left{
+      position: relative;
+      left: 0;
+      .legend{
+        // margin-top: 20px;
+        position: absolute;
+        right: 0;
+        top: 45px;
+        display: flex;
+        justify-content: start;
+        flex-wrap: wrap;
+        span{
+          position: relative;
+          color: #C3C7C7;
+          font-size: 12px;
+          margin-left: 20px;
+          display: flex;
+          align-items: center;
+          margin-bottom: 5px;
+          &::before{
+            position: absolute;
+            left: -12px;
+            // top: 5px;
+            content: '';
+            display: inline-block;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            z-index: 2;
+            background-color: var(--bgColor);
+          }
+        }
+      }
+      .hexagonModule{
+        margin-top: 60px;
+      }
+    }
     .honeycomb_icon{
       cursor: pointer;
       width: 91.99px;
@@ -91,19 +127,8 @@
 
 
 .sinking_right{
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden scroll ;
-  @include hidden-scroll();
   .table_box{
-    img{
-      width: 100%;
-      margin-bottom: 10px;
-    }
     .announcement_table{
-      // height: 150px !important;
       height: 16vh;
       min-height: 100px !important;
     }
@@ -121,20 +146,4 @@
     min-height: 220px !important;
     height: 25vh;
   }
-}
-
-.box{
-   width: 500px;
-   height: 600px; 
-   background-color: #fff;
-   .dialogTitle{
-    font-family: Roboto, Helvetica, Arial, sans-serif;
-    font-weight: 500;
-    color:#000;
-    border-bottom: 1px solid #aaaaaa;
-   }
-   .dialogContentText{
-    font-family: Roboto, Helvetica, Arial, sans-serif;
-    color:rgba(0,0,0,0.6)
-   }
 }

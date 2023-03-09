@@ -2,29 +2,25 @@ import React, { useEffect, useState, useImperativeHandle, forwardRef } from 'rea
 import { Box, Fade, Grid, FormLabel, MenuItem } from '@mui/material'
 import Input from '@/components/Input'
 import MyMenuItem from '@/components/MenuItem'
-import { keyArea } from '@/components/Map/json'
+import Title from '@/pages/main/components/Title'
+import TimeBar from '@/components/TimeBar'
+import WaterloggingTab from '@/pages/main/components/WaterloggingTab'
 import { useSelector, useDispatch } from 'react-redux'
 import { setTerrainClassificationActive } from '@/store/module/terrainClassificationActive'
 import SvgIcon from '@/components/SvgIcon'
-import time_bar from '@/assets/image/keyAreas/time_bar.png'
 import { circularRingOption, surfaceCircularRingOption } from './option'
 import Echarts from '@/components/Echarts'
 import { waterlogging } from '@/components/Map/json'
-import { colourStripData, echartTabs, hazardLevel, tabs, detailsInfo } from './json'
+import { colourStripData, echartTabs, hazardLevel, waterloggingTabs, detailsInfo } from './json'
 
 // 图片
-import waterlogging_title from '@/assets/image/charts/waterlogging_title.png'
-// import back_btn from '@/assets/image/png/back_btn.png'
-import buttonIcon from '@/assets/image/png/button_icon.png'
-// import buttonActiveIcon from '@/assets/image/png/button_active_icon.png'
 import colour_strip from '@/assets/image/png/colour_strip.png'
-import colour_strip_DSM from '@/assets/image/png/colour_strip_DSM.png'
 
 // 样式
 import './style.scss'
 import '../common.scss'
 
-function index({ onBack, waterloggingId, onItemClick, onWaterloggingActive }, ref) {
+function index({ active, waterloggingId, onItemClick, setActive }, ref) {
   // 设置redux值
   const dispatch = useDispatch()
   let terrainClassificationActive = useSelector(
@@ -49,13 +45,8 @@ function index({ onBack, waterloggingId, onItemClick, onWaterloggingActive }, re
   const [formParams, setFormParams] = useState({
     state: 0,
   })
-  // tab选中项
-  let [active, setActive] = useState(2)
-  // echartTab选中项
 
-  useImperativeHandle(ref, () => ({
-    setActive,
-  }))
+  useImperativeHandle(ref, () => ({}))
 
   useEffect(() => {
     let itemData: any = [...waterlogging].find(item => {
@@ -68,22 +59,6 @@ function index({ onBack, waterloggingId, onItemClick, onWaterloggingActive }, re
     setActive(2)
     setVisible(true)
   }, [waterloggingId])
-
-  /* 监听tab选择项 如果为0就隐藏右侧栏 */
-  useEffect(() => {
-    if (active === 0) {
-      setVisible(false)
-    } else {
-      setVisible(true)
-    }
-    onWaterloggingActive(active)
-  }, [active])
-
-  /* 返回按钮 */
-  const handleBack = () => {
-    // dispatch(setTerrainClassificationActive(0))
-    onBack()
-  }
 
   /* 列表项点击事件 */
   const handleItemClick = itemData => {
@@ -130,37 +105,44 @@ function index({ onBack, waterloggingId, onItemClick, onWaterloggingActive }, re
     // }
   }
 
+  /* 十二期选择器的点击事件 */
+  const handleTimeBarClick = active => {
+    console.log(active)
+  }
+
   return (
     <>
       <Box className={'leftBox leftBox_waterlogging'}>
         <Box className={'left'}>
-          <img src={waterlogging_title}></img>
-          <Grid container spacing={{ xs: 1 }} className="from">
-            <Grid item xs={6} className="from-item">
-              <FormLabel component="span" className="label">
-                危险等级
-              </FormLabel>
-              <Input
-                select
-                required
-                id="phoneInput"
-                size="small"
-                placeholder="危险等级"
-                value={formParams.state}
-                onChange={e => handleInputChange(e, 'state')}
-                autoComplete="off"
-                sx={{
-                  width: '70%',
-                }}
-              >
-                {hazardLevel.map((item, index) => (
-                  <MyMenuItem key={index} value={index}>
-                    {item}
-                  </MyMenuItem>
-                ))}
-              </Input>
+          <Box className="top">
+            <Title title="易涝区列表"></Title>
+            <Grid container spacing={{ xs: 1 }} className="from">
+              <Grid item xs={6} className="from-item">
+                <FormLabel component="span" className="label">
+                  危险等级
+                </FormLabel>
+                <Input
+                  select
+                  required
+                  id="phoneInput"
+                  size="small"
+                  placeholder="危险等级"
+                  value={formParams.state}
+                  onChange={e => handleInputChange(e, 'state')}
+                  autoComplete="off"
+                  sx={{
+                    width: '55%',
+                  }}
+                >
+                  {hazardLevel.map((item, index) => (
+                    <MyMenuItem key={index} value={index}>
+                      {item}
+                    </MyMenuItem>
+                  ))}
+                </Input>
+              </Grid>
             </Grid>
-          </Grid>
+          </Box>
           <Box className={'list'}>
             {list.map((item, index) => (
               <Box onClick={() => handleItemClick(item)} className={'item ' + (item.id === data.id ? 'active' : '')}>
@@ -200,123 +182,131 @@ function index({ onBack, waterloggingId, onItemClick, onWaterloggingActive }, re
       </Box>
       <Fade in={visible}>
         <Box className={'rightBox rightBox_waterlogging'}>
-          <Box className="title_bar">
-            {active === 2 && (
-              <div className="title_info">
-                <span className="title">{data.title}</span>
-                <p
-                  className={
-                    'tigs ' + (data.state === 1 ? 'tigs_green' : data.state === 2 ? 'tigs_yellow' : 'tigs_red')
-                  }
-                >
-                  {hazardLevel[data.state]}
-                </p>
+          <Box className="rightBox-warpper">
+            {/* 叉叉 */}
+            {active !== -1 && (
+              <div className="closeX-box">
+                <SvgIcon
+                  svgName="closeX"
+                  svgClass="closeX"
+                  onClick={() => {
+                    setActive(-1)
+                  }}
+                ></SvgIcon>
               </div>
             )}
-            {active === 1 && <span className="title_model">地物分类</span>}
-            {active === 3 && <span className="title_model">土壤湿度</span>}
-
-            <SvgIcon
-              svgName="closeX"
-              svgClass="closeX"
-              onClick={() => {
-                setVisible(false)
-              }}
-            ></SvgIcon>
-          </Box>
-          {active === 2 && (
-            <Box className="content_area ">
-              <p
-                className="mt font mt-30"
-                style={{
-                  display: 'flex',
-                }}
-              >
-                <span>经纬度：</span>
-                <div>
-                  {data.coordinates.length > 0 ? data.coordinates[0] : ''}
-                  <br />
-                  {data.coordinates.length > 0 ? data.coordinates[1] : ''}
-                </div>
-              </p>
-              <p className="mt font">详细地址：{data.position}</p>
-              <p className="mt font">易涝面积：{data.acreage}</p>
-              <p className="mt font">地理显示</p>
-              <img
-                src={data.mapImg}
-                style={{
-                  width: '100%',
-                }}
-              ></img>
-            </Box>
-          )}
-          {(active === 1 || active === 3) && (
-            <Box className="content_model">
-              <div className="soilWaterContentEchart_box">
-                {active == 1 ? (
-                  <Echarts options={surfaceCircularRingOption()}></Echarts>
-                ) : (
-                  <Echarts options={circularRingOption()}></Echarts>
-                )}
-              </div>
-              {active === 1 && (
-                <div className="echart_tab_box">
-                  {echartTabs.map((item, index) => (
-                    <div className="echart_tab" onClick={() => handleEchartTabClick(index)}>
-                      <SvgIcon
-                        svgClass="icon"
-                        svgName={terrainClassificationActive === index ? item.activeIcon : item.icon}
-                      ></SvgIcon>
-                      <p
-                        style={{
-                          color: terrainClassificationActive === index ? '#77B5FF' : '#2D7FE0',
-                        }}
-                      >
-                        {item.label}
-                      </p>
-                    </div>
-                  ))}
+            <Box className="title_bar">
+              {active === -1 && (
+                <div className="title_info">
+                  <span className="title">{data.title}</span>
+                  <p
+                    className={
+                      'tigs ' + (data.state === 1 ? 'tigs_green' : data.state === 2 ? 'tigs_yellow' : 'tigs_red')
+                    }
+                  >
+                    {hazardLevel[data.state]}
+                  </p>
                 </div>
               )}
-              <div className="soilWaterContentDetails_box">
-                <p className="title">{active === 1 ? '地物分类信息' : '土壤湿度信息'}</p>
-                <p className="details">
-                  {active === 1
-                    ? detailsInfo[0].map(item => {
-                        return (
-                          <span>
-                            {item}
-                            <br />
-                          </span>
-                        )
-                      })
-                    : detailsInfo[1].map(item => {
-                        return (
-                          <span>
-                            {item} <br />
-                          </span>
-                        )
-                      })}
-                  {/* {echartTabs[terrainClassificationActive].waterContentData.description} */}
-                </p>
-              </div>
+              {active === 1 && <span className="title_model">地物分类</span>}
+              {active === 3 && <span className="title_model">土壤湿度</span>}
+
+              <SvgIcon
+                svgName="closeX"
+                svgClass="closeX"
+                onClick={() => {
+                  setVisible(false)
+                }}
+              ></SvgIcon>
             </Box>
-          )}
+            {active === 2 && (
+              <Box className="content_area ">
+                <p
+                  className="mt font mt-30"
+                  style={{
+                    display: 'flex',
+                  }}
+                >
+                  <span>经纬度：</span>
+                  <div>
+                    {data.coordinates.length > 0 ? data.coordinates[0] : ''}
+                    <br />
+                    {data.coordinates.length > 0 ? data.coordinates[1] : ''}
+                  </div>
+                </p>
+                <p className="mt font">详细地址：{data.position}</p>
+                <p className="mt font">易涝面积：{data.acreage}</p>
+                <p className="mt font">地理显示</p>
+                <img
+                  src={data.mapImg}
+                  style={{
+                    width: '100%',
+                  }}
+                ></img>
+              </Box>
+            )}
+            {(active === 1 || active === 3) && (
+              <Box className="content_model">
+                <div className="soilWaterContentEchart_box">
+                  {active == 1 ? (
+                    <Echarts options={surfaceCircularRingOption()}></Echarts>
+                  ) : (
+                    <Echarts options={circularRingOption()}></Echarts>
+                  )}
+                </div>
+                {active === 1 && (
+                  <div className="echart_tab_box">
+                    {echartTabs.map((item, index) => (
+                      <div className="echart_tab" onClick={() => handleEchartTabClick(index)}>
+                        <SvgIcon
+                          svgClass="icon"
+                          svgName={terrainClassificationActive === index ? item.activeIcon : item.icon}
+                        ></SvgIcon>
+                        <p
+                          style={{
+                            color: terrainClassificationActive === index ? '#77B5FF' : '#2D7FE0',
+                          }}
+                        >
+                          {item.label}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div className="soilWaterContentDetails_box">
+                  <p className="title">{active === 1 ? '地物分类信息' : '土壤湿度信息'}</p>
+                  <p className="details">
+                    {active === 1
+                      ? detailsInfo[0].map(item => {
+                          return (
+                            <span>
+                              {item}
+                              <br />
+                            </span>
+                          )
+                        })
+                      : detailsInfo[1].map(item => {
+                          return (
+                            <span>
+                              {item} <br />
+                            </span>
+                          )
+                        })}
+                    {/* {echartTabs[terrainClassificationActive].waterContentData.description} */}
+                  </p>
+                </div>
+              </Box>
+            )}
+          </Box>
         </Box>
       </Fade>
-      {/* 时间条 */}
-      <img src={time_bar} className="time_bar" />
+      {/* 时间轴 */}
+      <div className="time_bar">
+        <TimeBar dataIndex={1} onClick={handleTimeBarClick}></TimeBar>
+      </div>
+
       {/* 标签栏 */}
-      <Box className="waterlogging_tabs">
-        {tabs.map(tab => (
-          <Box className="tab" onClick={() => handleTabClick(tab.id)}>
-            {/* <img src={tab.id == active ? buttonActiveIcon : buttonIcon} /> */}
-            <p style={{ color: tab.id == active ? '#61A8FC' : '#fff' }}>{tab.title}</p>
-          </Box>
-        ))}
-      </Box>
-      {/* 返回按钮 */}
-      {/* <img src={back_btn} className="back_btn" onClick={handleBack} /> */}
+      <WaterloggingTab list={waterloggingTabs} active={active} onChange={handleTabClick}></WaterloggingTab>
 
       {/* 色带 */}
       {(active === 3 || active === 0) && (

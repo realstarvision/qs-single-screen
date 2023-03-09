@@ -2,22 +2,15 @@
   position: relative;
   width: 100%;
   height: 100%;
-  // height: 1920px;
   box-shadow: inset 0px 0px 250px 30px #001031 !important;
   overflow: auto;
-  
-  .grid-left-box,.grid-right-box{
+  .map-box{
     position: absolute;
-    top: 65px;
-    z-index: 999;
+    z-index: 998;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
   }
-  .grid-left-box{
-    left:40px;
-  }
-  .grid-right-box{
-    right:40px;
-  }
-
   // 退出乔司按钮
   .quit_btn{
     width: 124.01px;
@@ -32,75 +25,20 @@
 
   // 进入乔司按钮
   .enter_btn{
-    width: 250px;
-    height: 50px;
+    width: 200px;
+    height: 40px;
     position: absolute;
     bottom:  40px;
     left: 50%;
-    transform: translateX(-50%);
+    margin-left: -100px;
     z-index: 999;
     cursor: pointer;
+    transition: all 0.5s;
     &:hover{
-      opacity: 0.9;
+      transform: scale(1.1);
     }
   }
 
-  /* 菜单 */
-  .menu{
-    cursor: pointer;
-    position: absolute;
-    width: 35%;
-    max-width:570px ;
-    min-width: 250px;
-    left: 50%;
-    bottom: 60px;
-    transform: translateX(-50%);
-    z-index: 999;
-    display:  flex;
-    justify-content: space-around;
-    // height: 175px;
-    .menu-item{
-      width: 29%;
-      display: flex;
-      justify-content: center;
-    }
-    img{
-      width:  100%;
-      // width: 200px;
-    }
-  }
-
-  /* 文件查看 */
-  .doc{
-    position: absolute;
-    top: 70px;
-    left: 710px;
-    z-index: 999;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    img{
-      width: 60px;
-      height: 60px;
-      cursor: pointer;
-      &:hover{
-        opacity: 0.8;
-      }
-    }
-  }
-
-
-  .snackBar{
-    font-size: 16px;
-    color: #000000d9;
-    background: #fff;
-    padding: 10px 16px;
-    border-radius: 2px;
-    box-shadow: 0 3px 6px -4px #0000001f, 0 6px 16px #00000014, 0 9px 28px 8px #0000000d;
-    font-variant: tabular-nums;
-    list-style: none;
-    margin-top: 80px;
-  }
 }
 
 /* 沉降色带 */
@@ -109,7 +47,7 @@
   height: 105px;
   position: absolute;
   z-index: 999;
-  right: 560px;
+  right: 540px;
   bottom: 90px;
 }
 

@@ -5,6 +5,7 @@ interface Props {
   svgClass?: string
   svgName: string
   onClick?: Function
+  style?: object
 }
 
 const SvgIcon = (props: Props) => {
@@ -12,7 +13,13 @@ const SvgIcon = (props: Props) => {
     props.onClick()
   }
   return (
-    <svg className={props.svgClass + ' svg'} aria-hidden="true" v-on="$listeners" onClick={handleClick}>
+    <svg
+      style={{ ...props.style }}
+      className={props.svgClass + ' svg'}
+      aria-hidden="true"
+      v-on="$listeners"
+      onClick={handleClick}
+    >
       <use xlinkHref={'#icon-' + props.svgName} />
     </svg>
   )

@@ -1,39 +1,30 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { Box, Grid, Typography, TextField, MenuItem, Snackbar, Slide } from '@mui/material'
-import { setWms } from '@/store/module/wms'
-import { setDangerLevel, reset } from '@/store/module/dangerLevel'
-import { reset as resetNetworkMonitoring } from '@/store/module/networkMonitoring'
+import { Box } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
+// 组件
 import Module from './components/module'
 import Map from '@/components/Map'
-import KeyAreasDetails from '@/pages/Details/KeyAreas'
+import Menu from '@/pages/main/components/Menu'
+import ButtonBox from './components/ButtonBox'
+import SvgIcon from '@/components/SvgIcon'
+// 详情模块
+import KeyAreas from '@/pages/Details/KeyAreas'
 import WellLid from '@/pages/Details/WellLid'
 import Waterlogging from '@/pages/Details/Waterlogging'
 import Garbage from '@/pages/Details/Garbage'
-import FlowImageDialog from '@/pages/FlowImageDialog'
+// 数据及工具
+import { setWms, resetWms } from '@/store/module/wms'
+import { setDangerLevel, reset } from '@/store/module/dangerLevel'
+import { reset as resetNetworkMonitoring } from '@/store/module/networkMonitoring'
 import { setSwitch } from '@/store/module/switch'
-import { waterlogging, wellLid1, wellLid2 } from '@/components/Map/json'
-import SvgIcon from '@/components/SvgIcon'
+import { setTerrainClassificationActive } from '@/store/module/terrainClassificationActive'
+import { keyArea, garbageSorting, wellLid, waterlogging } from '@/components/Map/json'
 import './style.scss'
 
 // 图片
-import safetyImage from '@/assets/image/tabs/safety.png'
-import safetyActiveImage from '@/assets/image/tabs/safety_active.png'
-import garbagesortingImage from '@/assets/image/tabs/garbagesorting.png'
-import garbagesortingActiveImage from '@/assets/image/tabs/garbagesorting_active.png'
-import waterloggingImage from '@/assets/image/tabs/waterlogging.png'
-import waterloggingActiveImage from '@/assets/image/tabs/waterlogging_active.png'
 import quitImg from '@/assets/image/btn/quit.png'
 import enterImg from '@/assets/image/btn/enter.png'
-import doc_file from '@/assets/image/doc/doc_file.png'
-import doc_flow from '@/assets/image/doc/doc_flow.png'
 import colour_strip_safety from '@/assets/image/png/colour_strip_safety.png'
-
-let tabs = [
-  [safetyImage, safetyActiveImage],
-  [waterloggingImage, waterloggingActiveImage],
-  [garbagesortingImage, garbagesortingActiveImage],
-]
 
 export default function index() {
   const waterloggingRef = useRef(null)
@@ -44,174 +35,160 @@ export default function index() {
   // 设置redux值
   const dispatch = useDispatch()
   let switchData = useSelector((state: { Switch }) => state.Switch.value)
-  // 重点区详情显示状态  // 0代表关闭
-  let [keyAreaId, setKeyAreaId] = useState(0)
-  let [type, setType] = useState('')
-  // 水井详情显示状态  // 0代表关闭
-  let [wellLidId, setWellLidId] = useState(0)
-  // 易涝区详情显示状态  // 0代表关闭
-  let [waterloggingId, setWaterloggingId] = useState(0)
-  // 垃圾柜详情显示状态  // 0代表关闭
-  let [garbageId, setGarbageId] = useState(0)
-  // 存储点击后点的位置
-  let [coordinates, SetCoordinates] = useState([])
-
+  let keyAreasActive = useSelector((state: { keyAreasActive }) => state.keyAreasActive.value)
+  // 选中点的信息
+  let [checkedPoint, setCheckedPoint] = useState(null)
+  // 标记点列表
+  let [markerList, setMarkerList] = useState([])
+  // polygon列表
+  let [polygonList, setPolygonList] = useState([])
+  // DSM中高度的点位
+  let [DSMPoint, setDSMPoint] = useState([])
+  // 社区范围和管理区域的点击状态
+  let [communityOrRegionVisible, setCommunityOrRegionVisible] = useState({
+    community: false,
+    region: false,
+  })
   // 易涝区中tab选中状态
   let [waterloggingActive, setWaterloggingActive] = useState(2)
-
   // 是否进入乔司区域
   let [enterQS, setEnterQS] = useState(false)
 
-  /* 标签单击事件 */
-  const handleTabClick = index => {
-    if (active !== index) {
-      dispatch(reset())
-      dispatch(resetNetworkMonitoring())
-      setActive(index)
-      if (index !== 0) {
-        dispatch(setWms({}))
-      }
-    }
-  }
-
-  /* 地图上图标点击事件 */
-  const handleMarkerClick = (e, type, item) => {
-    console.log(item)
-    if (type == 'keyArea' || type == 'road' || type == 'bridge' || type == 'danger' || type == 'fluctuate') {
-      setKeyAreaId(item.id)
-      setType(type)
-    } else if (type == 'wellLid') {
-      setWellLidId(item.id)
-      dispatch(
-        setSwitch({
-          waterAcreage: false,
-          wellLid: true,
-        })
-      )
-    } else if (type === 'waterlogging') {
-      setWaterloggingId(item.id)
-      dispatch(
-        setSwitch({
-          waterAcreage: true,
-          wellLid: false,
-        })
-      )
-      waterloggingRef.current.setActive(2)
-    } else if (type === 'garbage') {
-      setGarbageId(item.id)
-    }
-  }
-
-  /* 重点区域详情中的返回按钮 */
-  const handleKeyAreaBack = () => {
-    setKeyAreaId(0)
-    setType('')
-    // map.current.SetZoom()
-    SetCoordinates([])
-  }
-
-  /* 水井详情中的返回按钮 */
-  const handleWellLidBack = () => {
-    map.current.SetZoom()
-    setWellLidId(0)
-    dispatch(
-      setSwitch({
-        waterAcreage: true,
-        wellLid: true,
-      })
-    )
-    SetCoordinates([])
-  }
-
-  /* 易涝详情中的返回按钮 */
-  const handleWaterloggingBack = () => {
-    map.current.SetZoom()
-    setWaterloggingId(0)
-    dispatch(
-      setSwitch({
-        waterAcreage: true,
-        wellLid: true,
-      })
-    )
-    SetCoordinates([])
-    setWaterloggingActive(2)
-  }
-
-  /* 垃圾柜详情中的返回按钮 */
-  const handleGarbageBack = () => {
-    map.current.SetZoom()
-    setGarbageId(0)
-    SetCoordinates([])
-  }
-
   /* 详情里项的点击事件 */
   const handleItemClick = coordinates => {
-    SetCoordinates(coordinates)
+    // SetCoordinates(coordinates)
   }
 
   /* 查看易涝详情 */
   const handleCheckDetails = type => {
-    if (type === 'waterlogging') {
-      setWaterloggingId(1)
-      SetCoordinates(waterlogging[0].coordinates)
-      dispatch(
-        setSwitch({
-          waterAcreage: true,
-          wellLid: false,
-        })
-      )
+    // if (type === 'waterlogging') {
+    //   setWaterloggingId(1)
+    //   SetCoordinates(waterlogging[0].coordinates)
+    //   dispatch(
+    //     setSwitch({
+    //       waterAcreage: true,
+    //       wellLid: false,
+    //     })
+    //   )
+    // } else {
+    //   setWellLidId(1)
+    //   SetCoordinates(wellLid1[0].coordinates)
+    //   dispatch(
+    //     setSwitch({
+    //       waterAcreage: false,
+    //       wellLid: true,
+    //     })
+    //   )
+    // }
+  }
+
+  /* 监听沉降标签切换 */
+  useEffect(() => {
+    setListData(active, keyAreasActive)
+  }, [keyAreasActive])
+
+  /* 监听菜单切换 */
+  useEffect(() => {
+    if (active !== 0) {
+      dispatch(resetWms())
+      setListData(active, 0)
     } else {
-      setWellLidId(1)
-      SetCoordinates(wellLid1[0].coordinates)
-      dispatch(
-        setSwitch({
-          waterAcreage: false,
-          wellLid: true,
-        })
-      )
+      setListData(active, keyAreasActive)
+    }
+  }, [active])
+
+  /* 监听选中点 */
+  useEffect(() => {
+    if (checkedPoint) {
+      if (checkedPoint.type === 'waterlogging') {
+        setPolygonList([...waterlogging])
+        setMarkerList([])
+      } else if (checkedPoint.type === 'wellLid') {
+        setMarkerList([...wellLid])
+        setPolygonList([])
+      }
+    } else {
+      if (active === 1) {
+        setListData(active, 0)
+      }
+    }
+    // map.current.handleMarkerCenter(checkedPoint)
+  }, [checkedPoint])
+
+  /* 标签单击事件 */
+  const handleMenuClick = index => {
+    if (active !== index) {
+      if (index === 1 || index === 2) {
+        map.current.SetZoom()
+      }
+      // dispatch(reset())
+      // dispatch(resetNetworkMonitoring())
+      setActive(index)
+      // if (index !== 0) {
+      //   dispatch(setWms({}))
+      // }
     }
   }
 
-  /* 易涝下active改变 */
-  const handleWaterloggingActive = index => {
-    setWaterloggingActive(index)
+  /* 地图上图标点击事件 */
+  const handleMarkerClick = item => {
+    setCheckedPoint({ ...item })
   }
 
-  /* 退出乔司区域按钮 */
-  const handleQuitClick = () => {
-    setEnterQS(false)
+  /* 详情列表项的点击事件 */
+  const handleDetailsListItemClick = item => {
+    setCheckedPoint(item)
+    // 选项在地图中视角定位
+    map.current.handleMarkerCenter(item)
   }
 
-  /* 查看文件 */
-  const handleDocClick = type => {
-    flowImageDialogRef.current.handleSetData(type)
+  /* 设置标记列表数据 */
+  function setListData(menuId, mapTabId) {
+    if (menuId === 0) {
+      let list = mapTabId === 3 ? [...keyArea] : []
+      setPolygonList(list)
+      setMarkerList([])
+    } else if (menuId === 1) {
+      setMarkerList([...wellLid])
+      setPolygonList([...waterlogging])
+    } else {
+      setMarkerList(garbageSorting)
+      setPolygonList([])
+    }
   }
 
-  /* 垃圾设备列表点击事件 */
-  const handleDeviceRowClick = () => {
-    setGarbageId(1)
+  /* 详情页返回 */
+  const handleBack = () => {
+    if (active === 1) {
+      setWaterloggingActive(-1)
+    }
+    // 内涝tiff信息,点位信息
+    setCheckedPoint(null)
+    dispatch(setTerrainClassificationActive(null))
+    // 重新定位地图视角
+    if (active === 0) {
+      map.current.wmsPositioning()
+    } else {
+      map.current.SetZoom()
+    }
   }
+
   return (
     <Box className="main-container">
       {/* 地图 */}
-      <Box
-        style={{
-          position: 'absolute',
-          zIndex: 998,
-          width: '100%',
-          height: '100%',
-        }}
-      >
+      <Box className="map-box">
         <Map
           ref={map}
-          active={active}
+          markerList={markerList}
+          polygonList={polygonList}
           onMarkerClick={handleMarkerClick}
-          coordinates={coordinates}
-          waterloggingActive={waterloggingActive}
-          enterQS={enterQS}
+          DSMHeightPoint={DSMPoint}
+          checkedPoint={checkedPoint}
+          communityOrRegionVisible={communityOrRegionVisible}
         ></Map>
       </Box>
 
+      {/* 退出乔司全域 */}
       {!enterQS && (
         <img
           src={enterImg}
@@ -227,86 +204,49 @@ export default function index() {
         <>
           {/* 退出乔司区域按钮 */}
           {/* {!keyAreaId && !wellLidId && !waterloggingId && !garbageId && (
-            <img src={quitImg} className="quit_btn" onClick={handleQuitClick} />
+            <img src={quitImg} className="quit_btn" onClick={()=>{setEnterQS(false)}} />
           )} */}
 
-          {/* 文件查看 */}
-          {/* <Box className="doc">
-            <img src={doc_file} onClick={() => handleDocClick(1)}></img>
-            <img src={doc_flow} onClick={() => handleDocClick(2)}></img>
-          </Box> */}
-
-          {/* 左右中内容 */}
+          {/* 左右两侧内容 */}
           <Module active={active} onDeviceRowClick={handleCheckDetails}></Module>
-          {/* <Box
-            className="grid-left-box"
-            style={{
-              visibility: keyAreaId || wellLidId || waterloggingId || garbageId ? 'hidden' : 'visible',
-            }}
-          >
-            <Left active={active} onCheckDetails={handleCheckDetails}></Left>
-          </Box>
-          <Box
-            className="grid-right-box"
-            style={{
-              visibility: keyAreaId || wellLidId || waterloggingId || garbageId ? 'hidden' : 'visible',
-            }}
-          >
-            <Right active={active} onDeviceRowClick={handleDeviceRowClick}></Right>
-          </Box> */}
 
-          {/* 菜单 */}
-          <Box
-            className="menu"
-            style={{
-              visibility: keyAreaId || wellLidId || waterloggingId || garbageId ? 'hidden' : 'visible',
-            }}
-          >
-            {tabs.map((tab, index) => (
-              <Box className="menu-item">
-                <img src={active === index ? tab[1] : tab[0]} onClick={() => handleTabClick(index)}></img>
-              </Box>
-            ))}
-          </Box>
+          {/* 主菜单和返回按钮 */}
+          {!checkedPoint ? (
+            <Menu active={active} onMenuClick={handleMenuClick}></Menu>
+          ) : (
+            <ButtonBox className="back_btn" onClick={handleBack}></ButtonBox>
+          )}
 
           {/* 沉降 */}
-          {keyAreaId && (
-            <KeyAreasDetails
-              onBack={handleKeyAreaBack}
-              keyAreaId={keyAreaId}
-              onItemClick={handleItemClick}
-              type={type}
-            ></KeyAreasDetails>
+          {active === 0 && checkedPoint && (
+            <KeyAreas keyAreaId={checkedPoint.id} onItemClick={handleDetailsListItemClick}></KeyAreas>
           )}
 
-          {/* 水井 */}
-          {wellLidId && (
-            <WellLid onBack={handleWellLidBack} wellLidId={wellLidId} onItemClick={handleItemClick}></WellLid>
+          {/* 水井 , 水涝 */}
+          {active === 1 && checkedPoint && (
+            <>
+              {checkedPoint.type === 'wellLid' ? (
+                <WellLid wellLidId={checkedPoint.id} onItemClick={handleDetailsListItemClick}></WellLid>
+              ) : (
+                <Waterlogging
+                  waterloggingId={checkedPoint.id}
+                  active={waterloggingActive}
+                  setActive={setWaterloggingActive}
+                  onItemClick={handleItemClick}
+                ></Waterlogging>
+              )}
+            </>
           )}
 
-          {/* 垃圾柜 */}
-          {garbageId && (
-            <Garbage onBack={handleGarbageBack} garbageId={garbageId} onItemClick={handleItemClick}></Garbage>
-          )}
-
-          {/*易涝区 */}
-          {waterloggingId && (
-            <Waterlogging
-              ref={waterloggingRef}
-              onBack={handleWaterloggingBack}
-              waterloggingId={waterloggingId}
-              onItemClick={handleItemClick}
-              onWaterloggingActive={handleWaterloggingActive}
-            ></Waterlogging>
+          {/* 垃圾分类 */}
+          {active === 2 && checkedPoint && (
+            <Garbage garbageId={checkedPoint.id} onItemClick={handleDetailsListItemClick}></Garbage>
           )}
         </>
       )}
 
       {/* 沉降的色带 */}
       {enterQS && active === 0 && <img src={colour_strip_safety} className="colour_strip_safety" />}
-
-      {/* 查看文档的弹窗 */}
-      {/* <FlowImageDialog ref={flowImageDialogRef}></FlowImageDialog> */}
     </Box>
   )
 }

@@ -2,9 +2,7 @@
 
 .button_box-constainer{
   background-image: url('@/assets/image/button/button_background.png');
-  width: 250px;
-  height: 55px;
-  background-size: cover;
+  background-size: 100% 100%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,4 +14,12 @@
   &:hover{
     transform: scale(0.95)
   }
+  position: absolute;
+  bottom:  70px;
+  width: 185px;
+  height: 40px;
+  z-index: 999;
+  left: 50%;
+  margin-left: -125px;
+  cursor: pointer;
 }

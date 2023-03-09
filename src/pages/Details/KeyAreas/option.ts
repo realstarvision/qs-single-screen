@@ -11,11 +11,11 @@ export function circularRingOption(title, data) {
       top: 'center',
       textStyle: {
         color: '#4987FF',
-        fontSize: '0.8rem',
+        fontSize: '1rem',
       },
       subtextStyle: {
         color: '#ffffff',
-        fontSize: '0.5rem',
+        fontSize: '0.7rem',
       },
       textVerticalAlign: 'middle',
 
@@ -47,14 +47,14 @@ export function circularRingOption(title, data) {
       itemHeight: 5,
       textStyle: {
         color: "#C3C7C7",
-        fontSize: '0.45rem',
+        fontSize: '0.6rem',
       },
       icon: "circle"
     },
     series: [
       {
         type: 'pie',
-        radius: ['56%', '72%'],
+        radius: ['56%', '75%'],
         avoidLabelOverlap: false,
         label: {
           show: false,
@@ -161,7 +161,7 @@ export function linearGradientOption({
       itemHeight: 6,
       textStyle: {
         color: "#C3C7C7",
-        fontSize: '0.45rem',
+        fontSize: '0.6rem',
       },
       icon: "circle"
     },
@@ -179,7 +179,7 @@ export function linearGradientOption({
       axisLabel: {
         textStyle: {
           color: "#fff", // x轴颜色
-          fontSize: '0.5rem',
+          fontSize: '0.7rem',
         },
       },
     },
@@ -202,7 +202,7 @@ export function linearGradientOption({
       },
       axisLabel: {
         color: '#fff',
-        fontSize: '0.5rem',
+        fontSize: '0.7rem',
       }
     },
     series: []

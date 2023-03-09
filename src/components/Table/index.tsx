@@ -1,15 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, CSSProperties } from 'react'
 import { Box, Divider } from '@mui/material'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
-import TableHead from '@mui/material/TableHead'
-import TableRow from '@mui/material/TableRow'
-import Paper from '@mui/material/Paper'
 import './style.scss'
 
 interface columns {
+  style?: object
   title: string
   key: string
   width?: string
@@ -29,7 +23,6 @@ export default function BasicTable({
   let rollspeed = 80
   let rolllinkk = useRef(null)
   let rolllinkk1 = useRef(null)
-  let rolllinkk2 = useRef(null)
 
   useEffect(() => {
     // rolllinkk2.current.innerHTML = rolllinkk1.current.innerHTML
@@ -91,7 +84,8 @@ export default function BasicTable({
               return (
                 <tr
                   style={{
-                    background: index % 2 != 0 ? '#002758' : '',
+                    background: index % 2 != 0 ? '#001B47' : '',
+                    display: 'flex',
                   }}
                   onClick={() => handleRowClick(item)}
                 >
@@ -101,6 +95,7 @@ export default function BasicTable({
                         style={{
                           display: column.width ? 'inline-block' : '',
                           width: column.width || '',
+                          ...column.style,
                         }}
                       >
                         {item[column.key]}
@@ -112,33 +107,6 @@ export default function BasicTable({
             })}
           </table>
         </div>
-        {/* <div ref={rolllinkk2}>
-          <table className={'content '} width="100%">
-            {data.map((item, index) => {
-              return (
-                <tr
-                  style={{
-                    background: index % 2 != 0 ? '#002758' : '',
-                  }}
-                  onClick={() => handleRowClick(item)}
-                >
-                  {columns.map(column => {
-                    return (
-                      <td
-                        style={{
-                          display: column.width ? 'inline-block' : '',
-                          width: column.width || '',
-                        }}
-                      >
-                        {item[column.key]}
-                      </td>
-                    )
-                  })}
-                </tr>
-              )
-            })}
-          </table>
-        </div> */}
       </div>
     </Box>
   )

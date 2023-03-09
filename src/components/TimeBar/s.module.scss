@@ -1,0 +1,45 @@
+@import '@/assets/styles/animation.scss';
+.TimeBarContainer{
+  width: 650px;
+  height: 80px;
+  background: rgba(0,0,0,0.5);
+  padding: 10px 20px 17px 20px;
+  display: flex;
+  justify-content: space-around;
+  position: relative;
+  @include user-select(none);
+  z-index: 999;
+  box-sizing: border-box;
+  border-radius: 2px;
+  .line{
+    width: 100%;
+    position: absolute;
+    top:16px;
+    z-index: -1;
+  }
+  .month{
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    cursor: pointer;
+    &:hover{
+      img{
+        transform: scale(1.2);
+      }
+    } 
+    img{
+      width: 35px;
+      height: 35px;
+      transition: all 0.3s ease-in-out;
+    }
+    p{
+      // margin-top: 5px;
+    }
+    .animation{
+      animation: rotate 4.5s linear   infinite;
+    }
+  }
+}
