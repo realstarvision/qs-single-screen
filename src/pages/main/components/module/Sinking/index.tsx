@@ -12,7 +12,8 @@ import Title from '../../Title'
 import HexagonModule from '../../HexagonModule'
 import KeyAreasTabs from '../../KeyAreasTabs'
 import EventCount from '../../EventCount'
-import AnnouncementDialog from '@/pages/AnnouncementDialog'
+import AnnouncementDialog from '@/pages/Dialog/AnnouncementDialog'
+import EventSinkingDialog from '@/pages/Dialog/EventSinkingDialog'
 // 数据样式
 import { linearGradientOption, circularRingOption, doubleBarOption } from '../../echartOption'
 import {
@@ -60,6 +61,7 @@ export default function index() {
   const dangerLevelEchartRef = useRef(null)
   const announcementDialogRef = useRef(null)
   const eventProcessingSafetyRef = useRef(null)
+  const eventSinkingDialogRef = useRef(null)
 
   // 沉降面积数据
   let [subsidenceArea, setSubsidenceArea] = useState([
@@ -212,9 +214,12 @@ export default function index() {
   }
 
   /* 表格行点击事件 */
-  const handleRowClick = row => {
-    console.log(row)
-    announcementDialogRef.current.handleSetData(row)
+  const handleRowClick = (row, type) => {
+    if (type === 'announcement') {
+      announcementDialogRef.current.handleSetData(row)
+    } else {
+      eventSinkingDialogRef.current.handleSetData(row)
+    }
   }
 
   /* 图表鼠标移入移出事件 */
@@ -258,7 +263,7 @@ export default function index() {
       {/* 左 */}
       <FloatFrame className="left">
         <Box className="sinking_left side-wrapper">
-          <Grid spacing={{ xs: 2 }} container className="subsidence_risk_prediction">
+          <Grid container className="subsidence_risk_prediction">
             <Grid xs={6} className="subsidence_area">
               {/* <img src={subsidence_area_tab} /> */}
               <Title
@@ -274,7 +279,7 @@ export default function index() {
               </div>
             </Grid>
             <Grid xs={6} className="threat_level">
-              <Title title="历史数据" size="normal" />
+              <Title title="历史数据" size="small" />
               <Echarts
                 ref={historyDataEchartRef}
                 onMouseEnter={() => handleChartMouse('enter', 'history')}
@@ -331,23 +336,17 @@ export default function index() {
         <Box className="sinking_right side-wrapper">
           {/* 公告消息 */}
           <Box className="table_box">
-            <Title
-              size="normal"
-              style={{
-                marginBottom: '10px',
-              }}
-              title="公告信息"
-            />
+            <Title className="mb-10" title="公告信息" />
             <Table
               columns={announcementColumns}
               data={announcementListData}
               className="announcement_table"
-              onRowClick={handleRowClick}
+              onRowClick={row => handleRowClick(row, 'announcement')}
             ></Table>
           </Box>
           {/* 事件处理趋势 */}
           <Box className="event_processing_sinking">
-            <Title size="normal" title="事件处理统计" />
+            <Title title="事件处理统计" />
             <EventCount />
             <Echarts
               options={doubleBarOption()}
@@ -358,24 +357,19 @@ export default function index() {
           </Box>
           {/* 事件处理情况 */}
           <Box className="table_box">
-            <Title
-              size="normal"
-              title="事件处理情况"
-              style={{
-                marginBottom: '10px',
-              }}
-            />
+            <Title title="事件处理情况" className="mb-10" />
             <Table
               columns={eventProcessingColumns}
               data={eventProcessingListData}
               className="announcement_table"
+              onRowClick={row => handleRowClick(row, 'event')}
             ></Table>
           </Box>
 
           {/* 弹出框 */}
           <AnnouncementDialog ref={announcementDialogRef}></AnnouncementDialog>
           {/* 事件处理弹出框 */}
-          {/* <EventSinkingDialog ref={eventSinkingDialogRef}></EventSinkingDialog> */}
+          <EventSinkingDialog ref={eventSinkingDialogRef}></EventSinkingDialog>
         </Box>
       </FloatFrame>
     </>

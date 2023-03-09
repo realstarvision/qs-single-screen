@@ -120,6 +120,9 @@ const index = (
   // 监听点位列表和选中的点位
   useEffect(() => {
     if (map.current) {
+      console.log(markerList)
+      console.log(polygonList)
+      console.log(markers)
       // 如果点位列表发生变化并且有数据的时候先清空聚合点位再去添加
       if (markerList.length > 0 || polygonList.length > 0) {
         if (!markers) {
@@ -154,6 +157,7 @@ const index = (
 
   // 给标记添加事件
   function createMarker(item) {
+    console.log(111111)
     let marker = L.marker(item.coordinates.length > 1 ? item.coordinates : getCenter(item.coordinates[0]), {
       icon: Icon(item.icon, item.iconSize),
     })

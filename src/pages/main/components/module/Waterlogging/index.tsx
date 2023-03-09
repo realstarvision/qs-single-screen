@@ -4,7 +4,8 @@ import { useSelector, useDispatch } from 'react-redux'
 // 组件
 import Echarts from '@/components/Echarts'
 import Table from '@/components/Table'
-import AnnouncementDialog from '@/pages/AnnouncementDialog'
+import AnnouncementDialog from '@/pages/Dialog/AnnouncementDialog'
+import EventSinkingDialog from '@/pages/Dialog/EventSinkingDialog'
 import FloatFrame from '../../FloatFrame'
 import EventCount from '../../EventCount'
 import Switch from '@/components/Switch'
@@ -104,6 +105,7 @@ export default function index({ onCheckDetails }) {
   const announcementDialogRef = useRef(null)
   const waterAreaRef = useRef(null)
   const eventProcessingWaterloggingRef = useRef(null)
+  const eventSinkingDialogRef = useRef(null)
 
   // 设置redux值
   const dispatch = useDispatch()
@@ -116,6 +118,7 @@ export default function index({ onCheckDetails }) {
     onCheckDetails('wellLid')
   }
 
+  /* 初始图表化动画 */
   useEffect(() => {
     if (waterAreaRef.current) {
       setTimeout(() => {
@@ -187,9 +190,12 @@ export default function index({ onCheckDetails }) {
   }
 
   /* 表格行点击事件 */
-  const handleRowClick = row => {
-    console.log(row)
-    announcementDialogRef.current.handleSetData(row)
+  const handleRowClick = (row, type) => {
+    if (type === 'announcement') {
+      announcementDialogRef.current.handleSetData(row)
+    } else {
+      eventSinkingDialogRef.current.handleSetData(row)
+    }
   }
   return (
     <>
@@ -197,13 +203,7 @@ export default function index({ onCheckDetails }) {
       <FloatFrame className="left">
         <Box className="waterlogging_left side-wrapper">
           {/* 气象数据和管网监测 */}
-          <Grid
-            container
-            className="top"
-            sx={{
-              padding: 0,
-            }}
-          >
+          <Grid container className="top">
             <Grid xs={6}>
               <Title title="气象数据" size="small" />
               <Grid container className="meteorological">
@@ -226,16 +226,8 @@ export default function index({ onCheckDetails }) {
             </Grid>
           </Grid>
           {/* 水体面积监测 */}
-          {/* <Box className="water_acreage">
-            <div className="month">
-              <SvgIcon svgName="arrows" svgClass="leftArrows"></SvgIcon>
-              <span>12月</span>
-              <SvgIcon svgName="arrows" svgClass="rightArrows"></SvgIcon>
-            </div>
-            <img src={water_acreage} />
-          </Box> */}
           <Box className="water_acreage">
-            <Title title="水体面积监测" size="small"></Title>
+            <Title title="水体面积监测"></Title>
             <Echarts
               ref={waterAreaRef}
               onMouseEnter={() => handleMouse('enter', 'area')}
@@ -250,16 +242,6 @@ export default function index({ onCheckDetails }) {
           </Box>
 
           {/* 窖井盖消息通知 */}
-          {/* <Box className="well_lid">
-            <img src={waterlogging_area} />
-            <div className="switch">
-              <span>易涝点分布</span>
-              <Switch checked={switchData.waterAcreage} onChange={e => handleSwitch(e, 'waterAcreage')}></Switch>
-            </div>
-            <div className="check" onClick={handleCheckDetails}>
-              查看内涝分析详情&gt;&gt;&gt;
-            </div>
-          </Box> */}
           <Box className="well_lid">
             <Title size="normal" style={{ marginBottom: '10px' }} title="易涝地区监测"></Title>
             <div className="echart">
@@ -281,9 +263,9 @@ export default function index({ onCheckDetails }) {
         <Box className="waterlogging_right side-wrapper">
           {/* 公告消息 */}
           <Box className="table_box">
-            <Title title="公告信息" size="small" className="mb-10" />
+            <Title title="公告信息" className="mb-10" />
             <Table
-              onRowClick={handleRowClick}
+              onRowClick={row => handleRowClick(row, 'announcement')}
               columns={announcementColumns}
               data={announcementListData}
               className="announcement_table"
@@ -291,7 +273,7 @@ export default function index({ onCheckDetails }) {
           </Box>
           {/* 事件处理趋势 */}
           <Box className="event_processing_waterlogging">
-            <Title title="事件处理统计" size="small" />
+            <Title title="事件处理统计" />
             <EventCount />
             <Echarts
               options={doubleBarOption()}
@@ -302,15 +284,19 @@ export default function index({ onCheckDetails }) {
           </Box>
           {/* 事件处理情况 */}
           <Box className="table_box ">
-            <Title title="事件处理情况" size="small" className="mb-10" />
+            <Title title="事件处理情况" className="mb-10" />
             <Table
               columns={eventProcessingColumns}
               data={eventProcessingListData}
               className="announcement_table"
+              onRowClick={row => handleRowClick(row, 'event')}
             ></Table>
           </Box>
           {/* 弹出框 */}
           <AnnouncementDialog ref={announcementDialogRef}></AnnouncementDialog>
+
+          {/* 事件处理弹出框 */}
+          <EventSinkingDialog ref={eventSinkingDialogRef}></EventSinkingDialog>
         </Box>
       </FloatFrame>
     </>

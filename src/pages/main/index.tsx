@@ -30,6 +30,7 @@ export default function index() {
   const waterloggingRef = useRef(null)
   const flowImageDialogRef = useRef(null)
   const map = useRef(null)
+  const isFirstRun = useRef(true)
   // 标签选择   0:护民地质安全监测   1:保民降水内涝监测   2:便民垃圾分类监测
   let [active, setActive] = useState(0)
   // 设置redux值
@@ -109,6 +110,14 @@ export default function index() {
     }
     // map.current.handleMarkerCenter(checkedPoint)
   }, [checkedPoint])
+
+  /* 监听水井设备布局和易涝点位的开关状态 */
+  useEffect(() => {
+    if (active === 1) {
+      switchData.waterAcreage ? setPolygonList([...waterlogging]) : setPolygonList([])
+      switchData.wellLid ? setMarkerList([...wellLid]) : setMarkerList([])
+    }
+  }, [JSON.stringify(switchData)])
 
   /* 标签单击事件 */
   const handleMenuClick = index => {

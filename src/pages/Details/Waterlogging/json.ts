@@ -154,7 +154,6 @@ export let echartTabs = [
       },
     },
   },
-
   {
     id: 6,
     icon: 'plough',

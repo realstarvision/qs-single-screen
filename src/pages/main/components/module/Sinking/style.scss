@@ -1,7 +1,6 @@
 
 .sinking_left{
   .subsidence_risk_prediction{
-    margin-top: 5px;
     .threat_level{
       position: relative;
       img{
@@ -24,9 +23,11 @@
 
     .subsidence_area{
       position: relative;
+      left: 0;
       .chart-box{
         position: relative;
         height: 250px;
+        overflow: hidden;
       }
       .doughnut_chart{
         width: 255px;
@@ -127,6 +128,9 @@
 
 
 .sinking_right{
+  .mb-10{
+    margin-bottom: 10px;
+  }
   .table_box{
     .announcement_table{
       height: 16vh;

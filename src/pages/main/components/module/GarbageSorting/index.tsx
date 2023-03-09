@@ -3,7 +3,7 @@ import { Box } from '@mui/material'
 // 组件
 import Echarts from '@/components/Echarts'
 import Table from '@/components/Table'
-import AnnouncementDialog from '@/pages/AnnouncementDialog'
+import AnnouncementDialog from '@/pages/Dialog/AnnouncementDialog'
 import FloatFrame from '../../FloatFrame'
 import Title from '../../Title'
 import HexagonModule from '../../HexagonModule'
@@ -154,7 +154,7 @@ export default function index({ onDeviceRowClick }) {
         <Box className="garbage_sorting_left side-wrapper">
           {/* 垃圾分类 */}
           <Box className="garbage_sorting_chart">
-            <Title title="垃圾分类" size="small" />
+            <Title title="垃圾分类" />
             {/* <p className="unit">单位：kg</p> */}
             <div className="echarts-box">
               <Echarts
@@ -175,7 +175,7 @@ export default function index({ onDeviceRowClick }) {
           </Box>
           {/* 垃圾统计 */}
           <Box className="garbage_statistical_chart">
-            <Title title="垃圾统计" size="small" />
+            <Title title="垃圾统计" />
             <div className="garbage_statistical">
               {garbageStatisticalData.map(item => (
                 <StatisticalModule
@@ -188,7 +188,7 @@ export default function index({ onDeviceRowClick }) {
           </Box>
           {/* 累计沉降量 */}
           <Box className="garbage_disposal">
-            <Title title="垃圾处理趋势" size="small" />
+            <Title title="垃圾处理趋势" />
             <Echarts
               ref={garbageDisposalRef}
               onMouseEnter={() => handleMouse('enter', 'garbageDisposal')}
@@ -203,7 +203,7 @@ export default function index({ onDeviceRowClick }) {
         <Box className="garbage_sorting_right side-wrapper">
           {/* 公告消息 */}
           <Box className="table_box">
-            <Title title="公告信息" size="small" className="mb-10" />
+            <Title title="公告信息" className="mb-10" />
             <Table
               onRowClick={handleRowClick}
               columns={announcementColumns}
@@ -229,7 +229,7 @@ export default function index({ onDeviceRowClick }) {
           </Box>
           {/* 垃圾站点位 */}
           <Box className="garbage_classification_point">
-            <Title size="small" title="垃圾站点位" />
+            <Title title="垃圾站点位" />
             <div className="echarts-box">
               <Echarts
                 ref={garbagePointRef}

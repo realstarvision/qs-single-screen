@@ -23,10 +23,10 @@ import '../common.scss'
 function index({ active, waterloggingId, onItemClick, setActive }, ref) {
   // 设置redux值
   const dispatch = useDispatch()
+  // 地物分类信息
   let terrainClassificationActive = useSelector(
     (state: { terrainClassificationActive }) => state.terrainClassificationActive.value
   )
-
   // 显示状态
   let [visible, setVisible] = useState(true)
   // 列表
@@ -90,14 +90,28 @@ function index({ active, waterloggingId, onItemClick, setActive }, ref) {
 
   /* tab点击事件 */
   const handleTabClick = index => {
+    let terrainClassification = null
+    if (index === 1) {
+      terrainClassification = echartTabs[0]
+    } else if (index === 2) {
+      terrainClassification = null
+    } else if (index === 0 || index === 3) {
+      let data = waterloggingTabs.find(item => {
+        return item.id === index
+      })
+      terrainClassification = {
+        layers: data.layers,
+      }
+    }
+    dispatch(setTerrainClassificationActive(terrainClassification))
     setActive(index)
   }
 
   /* echartTabs 的点击事件 */
-  const handleEchartTabClick = index => {
+  const handleEchartTabClick = item => {
     // setEchartTabActive(index)
     // if (index === 0 || index === 1 || index === 2) {
-    dispatch(setTerrainClassificationActive(index))
+    dispatch(setTerrainClassificationActive(item))
     // }
   }
 
